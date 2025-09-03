@@ -8,6 +8,7 @@ import re
 import os
 from config import Config
 from groq_client import GroqClient, GroqAPIError
+from verbose_logger import get_logger
 
 class MessageGenerator:
     """Handles commit message generation with AI and fallback logic"""
@@ -25,14 +26,22 @@ class MessageGenerator:
     def __init__(self, config: Config):
         self.config = config
         self.groq_client = None
+        self.logger = get_logger()
+        
+        self.logger.debug("Initializing MessageGenerator", "MSG_GEN")
 
         # Only initialize Groq client if API key is available
         if config.has_groq_api_key():
+            self.logger.debug("API key available, initializing Groq client", "MSG_GEN")
             try:
                 self.groq_client = GroqClient(config)
-            except GroqAPIError:
+                self.logger.info("Groq client initialized successfully", "MSG_GEN")
+            except GroqAPIError as e:
                 # If client initialization fails, we'll use fallback
+                self.logger.warning(f"Groq client initialization failed: {str(e)}", "MSG_GEN")
                 self.groq_client = None
+        else:
+            self.logger.debug("No API key available, will use fallback messages", "MSG_GEN")
 
     def generate_message(self, diff: str, files: List[str]) -> str:
         """
@@ -48,40 +57,82 @@ class MessageGenerator:
         Raises:
             GroqAPIError: If there's a critical API error that should be reported to user
         """
+        self.logger.debug(f"Generating message for {len(files)} files, diff length: {len(diff)}", "MSG_GEN")
+        
         # Try AI generation first if available
         if self.groq_client and self._should_use_ai(diff):
+            self.logger.debug("Attempting AI message generation", "MSG_GEN")
+            
             try:
+                # Check API availability first
+                self.logger.debug("Checking API availability", "MSG_GEN")
                 if not self.groq_client.is_api_available():
                     # API is not available, but this is expected in some cases
                     # Don't raise an error, just use fallback
-                    pass
+                    self.logger.log_fallback_trigger("API not available", {
+                        "groq_client_exists": True,
+                        "should_use_ai": True,
+                        "api_available": False
+                    })
                 else:
+                    self.logger.debug("API is available, generating message", "MSG_GEN")
                     ai_message = self.groq_client.generate_commit_message(diff)
+                    self.logger.debug(f"AI generated message: {ai_message}", "MSG_GEN")
 
                     # Validate the AI-generated message
                     if self.validate_conventional_format(ai_message):
+                        self.logger.info(f"AI message validated successfully: {ai_message}", "MSG_GEN")
+                        self.logger.log_message_generation("groq_api", diff, ai_message)
                         return ai_message
                     else:
+                        self.logger.warning(f"AI message doesn't follow conventional format: {ai_message}", "MSG_GEN")
                         # If AI message doesn't follow format, try to fix it
                         fixed_message = self._fix_conventional_format(ai_message, files)
                         if fixed_message:
+                            self.logger.info(f"Fixed AI message format: {fixed_message}", "MSG_GEN")
+                            self.logger.log_message_generation("groq_api_fixed", diff, fixed_message)
                             return fixed_message
+                        else:
+                            self.logger.warning("Could not fix AI message format, using fallback", "MSG_GEN")
 
             except GroqAPIError as e:
+                self.logger.error(f"Groq API error: {str(e)}", "MSG_GEN")
+                
                 # Check if this is a critical error that should be reported
                 error_msg = str(e).lower()
                 if any(critical in error_msg for critical in ['invalid api key', 'unauthorized', 'authentication']):
                     # Critical authentication errors should be reported
+                    self.logger.error("Critical authentication error, re-raising", "MSG_GEN")
                     raise e
                 elif 'rate limit' in error_msg:
                     # Rate limit errors should be reported but are recoverable
+                    self.logger.warning("Rate limit error, re-raising", "MSG_GEN")
                     raise GroqAPIError("Límite de API excedido. Intenta nuevamente en unos minutos o usa el mensaje de respaldo.")
                 else:
                     # Other API errors can fall back silently
-                    pass
+                    self.logger.log_fallback_trigger(f"API error: {str(e)}", {
+                        "error_type": type(e).__name__,
+                        "error_message": str(e)
+                    })
+        else:
+            # Log why we're not using AI
+            if not self.groq_client:
+                self.logger.log_fallback_trigger("No Groq client available", {
+                    "groq_client_exists": False,
+                    "api_key_configured": self.config.has_groq_api_key()
+                })
+            elif not self._should_use_ai(diff):
+                self.logger.log_fallback_trigger("Diff not suitable for AI", {
+                    "diff_length": len(diff),
+                    "diff_lines": len(diff.split('\n')),
+                    "max_diff_size": self.config.MAX_DIFF_SIZE
+                })
 
         # Use fallback message generation
-        return self.generate_fallback_message(files)
+        self.logger.debug("Using fallback message generation", "MSG_GEN")
+        fallback_message = self.generate_fallback_message(files)
+        self.logger.log_message_generation("fallback", str(files), fallback_message)
+        return fallback_message
 
     def generate_fallback_message(self, files: List[str]) -> str:
         """

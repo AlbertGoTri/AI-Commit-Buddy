@@ -143,3 +143,45 @@
   - Verify proper error handling and user experience
   - Perform final code review and cleanup
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.1-2.6, 3.1-3.3, 4.1-4.4, 5.1-5.4, 6.1-6.4_
+
+- [x] 12. Debug and fix Kiro command recognition issue
+
+
+
+
+
+  - Investigate why `kiro commit --from-diff` shows "Warning: 'from-diff' is not in the list of known options"
+  - Analyze current hook configuration in `.kiro/hooks/commit.yml`
+  - Test different command structures and argument parsing approaches
+  - Fix the issue causing empty "commit" file creation
+  - Verify Kiro properly recognizes and executes the command
+  - _Requirements: 5.2, 5.5, 7.1, 7.2_
+
+- [x] 13. Debug and fix Groq API integration issue
+
+
+
+
+
+  - Investigate why the system always uses fallback messages instead of Groq API
+  - Create diagnostic tools to test API key configuration and connectivity
+  - Add verbose logging to track API call flow and identify failure points
+  - Fix any issues preventing proper API usage when credentials are configured
+  - Verify AI-generated messages are used when API is available
+  - _Requirements: 4.5, 4.6, 7.3, 7.4_
+
+- [ ] 14. Create comprehensive debugging utilities
+  - Implement CommandDebugger class for hook configuration validation
+  - Create APIDebugger class for API connectivity and response testing
+  - Build DiagnosticTool for end-to-end system health checks
+  - Add debug mode flag to main CLI for verbose troubleshooting output
+  - Write unit tests for all debugging utilities
+  - _Requirements: 7.5_
+
+- [ ] 15. Validate and test bug fixes
+  - Test that `kiro commit --from-diff` executes without warnings
+  - Verify no empty "commit" files are created during execution
+  - Test that properly configured Groq API generates intelligent commit messages
+  - Validate fallback behavior only triggers when API is genuinely unavailable
+  - Create regression tests to prevent these issues from reoccurring
+  - _Requirements: 7.1, 7.2, 7.3, 7.4_

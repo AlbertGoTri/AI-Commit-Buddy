@@ -1,7 +1,11 @@
-name: "Commit Buddy"
-description: "Generate AI-powered commit messages"
-command: "python .kiro/scripts/commit_buddy.py"
+name: commit-buddy
+description: AI-powered commit message generator
+command: C:\Users\Gotri\AppData\Local\Programs\Python\Python313\python.exe
 args:
-  - "--from-diff"
+- .kiro/scripts/commit_buddy.py
+- --from-diff
 triggers:
-  - manual
+- manual
+workingDirectory: .
+env:
+  PYTHONPATH: .kiro/scripts

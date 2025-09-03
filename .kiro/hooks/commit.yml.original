@@ -1,0 +1,7 @@
+name: "Commit Buddy"
+description: "Generate AI-powered commit messages"
+command: "python .kiro/scripts/commit_buddy.py"
+args:
+  - "--from-diff"
+triggers:
+  - manual

@@ -51,6 +51,8 @@ Kiro Commit Buddy es una herramienta de CLI que automatiza la generación de men
 2. WHEN la variable de entorno no está configurada THEN el sistema SHALL mostrar un mensaje de error claro con instrucciones
 3. WHEN la API key es inválida THEN el sistema SHALL informar al usuario y usar el mecanismo de fallback
 4. IF la API key está configurada THEN el sistema SHALL usar el modelo `llama3-70b-8192` para generar mensajes
+5. WHEN la API key está configurada correctamente THEN el sistema SHALL usar la API de Groq en lugar del mensaje genérico de fallback
+6. WHEN la API de Groq responde exitosamente THEN el sistema SHALL usar el mensaje generado por IA en lugar de "update <archivos>"
 
 ### Requirement 5
 
@@ -58,10 +60,11 @@ Kiro Commit Buddy es una herramienta de CLI que automatiza la generación de men
 
 #### Acceptance Criteria
 
-1. WHEN el usuario instala la herramienta THEN el comando SHALL estar registrado en `.kiro/spec.yml`
-2. WHEN el usuario ejecuta `kiro commit --from-diff` THEN Kiro SHALL reconocer y ejecutar el comando
+1. WHEN el usuario instala la herramienta THEN el comando SHALL estar registrado correctamente en `.kiro/hooks/commit.yml`
+2. WHEN el usuario ejecuta `kiro commit --from-diff` THEN Kiro SHALL reconocer y ejecutar el comando sin mostrar warnings sobre opciones desconocidas
 3. WHEN la herramienta se ejecuta THEN el sistema SHALL funcionar desde cualquier directorio dentro del repositorio Git
 4. WHEN el comando se registra THEN el sistema SHALL estar disponible inmediatamente sin reiniciar Kiro
+5. WHEN el usuario ejecuta el comando THEN el sistema SHALL NOT crear archivos vacíos llamados "commit"
 
 ### Requirement 6
 
@@ -73,3 +76,15 @@ Kiro Commit Buddy es una herramienta de CLI que automatiza la generación de men
 2. WHEN el usuario lee la documentación THEN el documento SHALL explicar cómo configurar `GROQ_API_KEY`
 3. WHEN el usuario consulta ejemplos THEN el documento SHALL mostrar casos de uso comunes con `kiro commit --from-diff`
 4. WHEN el usuario necesita troubleshooting THEN el documento SHALL incluir soluciones para problemas comunes
+
+### Requirement 7
+
+**User Story:** Como desarrollador, quiero que los bugs reportados en el comando `kiro commit --from-diff` sean corregidos, para que la herramienta funcione correctamente sin generar archivos no deseados o mostrar warnings.
+
+#### Acceptance Criteria
+
+1. WHEN el usuario ejecuta `kiro commit --from-diff` THEN el sistema SHALL NOT mostrar el warning "Warning: 'from-diff' is not in the list of known options"
+2. WHEN el usuario ejecuta `kiro commit --from-diff` THEN el sistema SHALL NOT crear un archivo vacío llamado "commit"
+3. WHEN la API key de Groq está configurada correctamente THEN el sistema SHALL usar la API para generar mensajes inteligentes
+4. WHEN la API de Groq está disponible THEN el sistema SHALL NOT usar siempre el mensaje genérico "update <archivos>"
+5. WHEN hay un error en la configuración del comando THEN el sistema SHALL mostrar mensajes de error claros para debugging

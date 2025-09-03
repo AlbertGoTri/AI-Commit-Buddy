@@ -5,6 +5,7 @@ Main CLI entry point
 """
 
 import sys
+import os
 import argparse
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from git_operations import GitOperations, GitOperationError
 from groq_client import GroqClient, GroqAPIError
 from message_generator import MessageGenerator
 from user_interface import UserInterface
+from verbose_logger import get_logger, enable_verbose_logging
 
 class CommitBuddy:
     """Main CLI handler for Kiro Commit Buddy"""
@@ -24,6 +26,7 @@ class CommitBuddy:
         self.config = Config()
         self.git_ops = GitOperations()
         self.ui = UserInterface()
+        self.logger = get_logger()
 
     def main(self, args=None):
         """Main entry point"""
@@ -35,17 +38,51 @@ class CommitBuddy:
             action="store_true",
             help="Generate commit message from staged changes"
         )
+        parser.add_argument(
+            "--verbose", "-v",
+            action="store_true",
+            help="Enable verbose logging for debugging"
+        )
+        parser.add_argument(
+            "--debug-api",
+            action="store_true",
+            help="Run API diagnostics instead of generating commit"
+        )
 
         parsed_args = parser.parse_args(args)
 
-        if parsed_args.from_diff:
+        # Enable verbose logging if requested
+        if parsed_args.verbose or os.getenv("KIRO_COMMIT_BUDDY_VERBOSE"):
+            enable_verbose_logging()
+            self.logger.info("Verbose logging enabled", "MAIN")
+
+        if parsed_args.debug_api:
+            return self.run_api_diagnostics()
+        elif parsed_args.from_diff:
             return self.handle_from_diff()
         else:
             parser.print_help()
             return 0
 
+    def run_api_diagnostics(self):
+        """Run comprehensive API diagnostics"""
+        try:
+            from api_debugger import APIDebugger
+            debugger = APIDebugger()
+            debugger.set_verbose(True)
+            debugger.run_comprehensive_diagnostic()
+            return 0
+        except ImportError:
+            self.ui.show_error("API debugger not available. Please ensure api_debugger.py is present.")
+            return 1
+        except Exception as e:
+            self.ui.show_error(f"Error running diagnostics: {str(e)}")
+            return 1
+
     def handle_from_diff(self):
         """Handle the --from-diff command"""
+        self.logger.info("Starting commit message generation from diff", "MAIN")
+        
         try:
             # Step 1: Comprehensive Git environment validation
             is_valid, error_msg = self.git_ops.validate_git_environment()

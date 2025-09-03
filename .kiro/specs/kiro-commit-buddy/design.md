@@ -83,6 +83,8 @@ class UserInterface:
 class KiroHook:
     def register_command() -> None
     def get_command_config() -> dict
+    def validate_hook_configuration() -> bool
+    def debug_command_registration() -> dict
 ```
 
 ## Data Models
@@ -256,4 +258,65 @@ class Config:
 6. **Ejecución:** Commit automático o permitir edición manual
 7. **Resultado:** Mostrar hash del commit creado
 
-Esta arquitectura asegura robustez, facilidad de testing, y una experiencia de usuario fluida mientras mantiene el código simple y mantenible.
+## Debugging and Issue Resolution
+
+### Identified Issues and Solutions
+
+#### Issue 1: Kiro Command Recognition
+**Problem:** `kiro commit --from-diff` shows warning "Warning: 'from-diff' is not in the list of known options" and creates empty "commit" file.
+
+**Root Cause Analysis:**
+- Hook configuration may have incorrect command structure
+- Kiro may not be recognizing the hook properly
+- Command parsing issue in Kiro's argument handling
+
+**Solution Strategy:**
+1. Verify hook configuration format in `.kiro/hooks/commit.yml`
+2. Test different command structures (separate python and script args)
+3. Add debugging output to verify hook registration
+4. Implement command validation utilities
+
+#### Issue 2: Generic Commit Messages
+**Problem:** Always generates "update <files>" instead of using Groq API.
+
+**Root Cause Analysis:**
+- API key configuration issues
+- API connectivity problems
+- Fallback logic being triggered incorrectly
+- Error handling masking API failures
+
+**Solution Strategy:**
+1. Add comprehensive API debugging utilities
+2. Implement verbose logging for API calls
+3. Validate API key format and connectivity
+4. Improve error reporting for API failures
+
+### Debugging Components
+
+#### Command Registration Debugger
+```python
+class CommandDebugger:
+    def validate_hook_configuration() -> Tuple[bool, List[str]]
+    def test_kiro_command_recognition() -> bool
+    def verify_script_execution() -> Tuple[bool, str]
+    def check_file_permissions() -> bool
+```
+
+#### API Integration Debugger
+```python
+class APIDebugger:
+    def validate_api_key() -> Tuple[bool, str]
+    def test_api_connectivity() -> Tuple[bool, str]
+    def test_sample_api_call() -> Tuple[bool, str, dict]
+    def debug_fallback_triggers() -> dict
+```
+
+#### Comprehensive Diagnostic Tool
+```python
+class DiagnosticTool:
+    def run_full_diagnostic() -> dict
+    def generate_debug_report() -> str
+    def test_end_to_end_flow() -> List[Tuple[str, bool, str]]
+```
+
+Esta arquitectura asegura robustez, facilidad de testing, y una experiencia de usuario fluida mientras mantiene el código simple y mantenible, con herramientas adicionales para diagnosticar y resolver los problemas reportados.

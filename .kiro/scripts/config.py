@@ -12,7 +12,7 @@ class Config:
     def __init__(self):
         # Groq API Configuration
         self.GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY")
-        self.GROQ_MODEL: str = "llama3-70b-8192"
+        self.GROQ_MODEL: str = "llama-3.1-8b-instant"  # Updated to current available model
         self.GROQ_ENDPOINT: str = "https://api.groq.com/openai/v1/chat/completions"
 
         # Application Settings
