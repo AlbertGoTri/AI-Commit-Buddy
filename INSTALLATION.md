@@ -71,7 +71,7 @@ pip --version
 
 ### Paso 3: Instalar Kiro Commit Buddy
 
-#### Opción A: Ya tienes el código (Situación actual)
+#### Opción A: Ya tienes el código
 
 **¡Si ya tienes estos archivos en tu proyecto, no necesitas hacer nada más!** 
 El Kiro Commit Buddy ya está instalado y listo para usar.
@@ -117,7 +117,7 @@ Si tienes los archivos del proyecto:
    pip install -r .kiro/scripts/requirements.txt
    ```
 
-### Paso 4: Configurar Groq API (Opcional pero recomendado)
+### Paso 4: Configurar Groq API
 
 #### 4.1 Obtener API Key
 
