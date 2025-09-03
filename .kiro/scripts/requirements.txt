@@ -1,0 +1,16 @@
+# Kiro Commit Buddy Dependencies
+# Core dependencies for HTTP requests and colored terminal output
+
+# HTTP client for Groq API communication
+requests>=2.31.0
+
+# Cross-platform colored terminal text
+colorama>=0.4.6
+
+# Optional development dependencies (install with: pip install -r requirements-dev.txt)
+# pytest>=7.0.0          # Testing framework
+# pytest-mock>=3.10.0    # Mocking for tests
+# responses>=0.23.0      # HTTP request mocking
+# black>=23.0.0          # Code formatting
+# flake8>=6.0.0          # Code linting
+# mypy>=1.0.0            # Type checking
