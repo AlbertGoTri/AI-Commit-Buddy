@@ -82,15 +82,41 @@ class Config:
 
     def get_commit_prompt_template(self) -> str:
         """Get the prompt template for commit message generation"""
-        return """Analiza el siguiente git diff y genera un mensaje de commit siguiendo Conventional Commits.
+        return """Analiza cuidadosamente el siguiente git diff y genera un mensaje de commit específico y descriptivo siguiendo Conventional Commits.
 
-Reglas:
-- Usa prefijos: feat, fix, docs, refactor, test, chore
-- Máximo 50 caracteres para el título
-- Sé específico pero conciso
-- En español
+INSTRUCCIONES IMPORTANTES:
+1. Lee el diff línea por línea para entender QUÉ se está cambiando exactamente
+2. Identifica elementos específicos como: botones, funciones, clases, texto, estilos, etc.
+3. Describe la acción específica, no uses términos genéricos como "actualiza" o "modifica"
+4. Sé descriptivo sobre QUÉ se añade, elimina o cambia
 
-Diff:
+PREFIJOS:
+- feat: nueva funcionalidad (botones, formularios, páginas, funciones)
+- fix: corrección de errores
+- docs: documentación (README, comentarios)
+- style: cambios de estilo/formato (CSS, indentación)
+- refactor: reestructuración de código
+- test: añadir o modificar tests
+- chore: tareas de mantenimiento
+
+EJEMPLOS DE BUENOS MENSAJES:
+- "feat: añade botón de contacto en header"
+- "feat: implementa formulario de login"
+- "fix: corrige validación de email"
+- "style: mejora espaciado en navegación"
+- "docs: añade comentarios a función calcular"
+
+EJEMPLOS DE MALOS MENSAJES (evitar):
+- "docs: actualiza index.html"
+- "feat: modifica archivo"
+- "chore: cambios varios"
+
+Diff a analizar:
 {diff}
 
-Responde solo con el mensaje de commit:"""
+RESPONDE ÚNICAMENTE CON EL MENSAJE DE COMMIT. NO incluyas explicaciones, justificaciones o texto adicional.
+
+Formato requerido: "prefijo: descripción específica"
+Máximo 50 caracteres.
+
+Mensaje de commit:"""

@@ -207,17 +207,45 @@ class GroqClient:
 
     def _clean_commit_message(self, message: str) -> str:
         """Clean and validate the commit message"""
+        import re
+        
         # Remove any extra whitespace and newlines
         message = message.strip()
-
-        # Take only the first line if there are multiple lines
-        if '\n' in message:
-            message = message.split('\n')[0].strip()
-
-        # Remove quotes if the message is wrapped in them
-        if (message.startswith('"') and message.endswith('"')) or \
-           (message.startswith("'") and message.endswith("'")):
-            message = message[1:-1].strip()
+        
+        # If the message contains explanations, try to extract just the commit message
+        lines = message.split('\n')
+        
+        # Look for lines that match conventional commit format
+        conventional_pattern = r'^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+'
+        
+        for line in lines:
+            line = line.strip()
+            # Remove quotes if present
+            if (line.startswith('"') and line.endswith('"')) or \
+               (line.startswith("'") and line.endswith("'")):
+                line = line[1:-1].strip()
+            
+            # Remove backticks if present
+            if line.startswith('`') and line.endswith('`'):
+                line = line[1:-1].strip()
+            
+            # Check if this line matches conventional commit format
+            if re.match(conventional_pattern, line, re.IGNORECASE):
+                message = line
+                break
+        else:
+            # If no conventional commit found, use the first non-empty line
+            for line in lines:
+                line = line.strip()
+                if line and not line.lower().startswith(('análisis:', 'justificación:', 'basándome', 'el mensaje')):
+                    # Remove quotes and backticks
+                    if (line.startswith('"') and line.endswith('"')) or \
+                       (line.startswith("'") and line.endswith("'")):
+                        line = line[1:-1].strip()
+                    if line.startswith('`') and line.endswith('`'):
+                        line = line[1:-1].strip()
+                    message = line
+                    break
 
         # Ensure the message is not empty after cleaning
         if not message:
