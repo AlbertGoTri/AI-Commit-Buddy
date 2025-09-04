@@ -99,14 +99,31 @@ class GitOperations:
     def get_staged_diff(self) -> str:
         """Get the diff of staged changes"""
         try:
+            # First try normal diff
             result = subprocess.run(
                 ['git', 'diff', '--staged'],
                 capture_output=True,
                 text=True,
                 timeout=10
             )
+            
+            # If the diff contains "Binary files differ", try with --text flag
             if result.returncode == 0:
-                return result.stdout
+                diff_output = result.stdout
+                
+                if "Binary files" in diff_output and "differ" in diff_output:
+                    # Force text diff for better analysis
+                    result = subprocess.run(
+                        ['git', 'diff', '--staged', '--text'],
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
+                    diff_output = result.stdout
+                
+                # Clean up null characters and other encoding issues
+                diff_output = self._clean_diff_output(diff_output)
+                return diff_output
             else:
                 raise GitOperationError(f"Error obteniendo diff: {result.stderr.strip()}")
         except subprocess.TimeoutExpired:
@@ -115,6 +132,19 @@ class GitOperations:
             raise GitOperationError("Git no está disponible")
         except Exception as e:
             raise GitOperationError(f"Error inesperado obteniendo diff: {str(e)}")
+    
+    def _clean_diff_output(self, diff: str) -> str:
+        """Clean diff output from encoding issues"""
+        # Remove null characters that can appear in UTF-16 encoded files
+        diff = diff.replace('\x00', '')
+        
+        # Remove other problematic characters
+        diff = diff.replace('\ufeff', '')  # BOM character
+        
+        # Normalize line endings
+        diff = diff.replace('\r\n', '\n').replace('\r', '\n')
+        
+        return diff
 
     def check_staged_changes(self) -> Tuple[bool, str, List[str]]:
         """
