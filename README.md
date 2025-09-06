@@ -77,7 +77,7 @@ GROQ_API_KEY=your_api_key_here
 ### Basic command
 
 ```bash
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 This command:
@@ -94,13 +94,13 @@ This command:
 git add file1.py file2.js
 
 # 2. Generate and execute the commit
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### Session example
 
 ```
-$ kiro commit --from-diff
+$ python .kiro/scripts/commit_buddy.py --from-diff
 
 🔍 Analyzing staged changes...
 🤖 Generating message with AI...
@@ -133,7 +133,7 @@ The tool automatically generates the correct prefix based on your changes:
 **Solution:**
 ```bash
 cd your-git-project
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### Error: "No staged changes for commit"
@@ -143,7 +143,7 @@ kiro commit --from-diff
 **Solution:**
 ```bash
 git add file1.py file2.js
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### Error: "GROQ_API_KEY not configured"

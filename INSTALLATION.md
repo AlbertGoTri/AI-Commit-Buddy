@@ -14,8 +14,7 @@ A **Kiro workspace** is any directory that contains a `.kiro/` folder. It's like
 
 ### Does it only work in Kiro projects?
 **No!** It works in **any Git repository**, whether it has Kiro or not:
-- **With Kiro**: `kiro commit --from-diff` (native command)
-- **Without Kiro**: `python .kiro/scripts/commit_buddy.py --from-diff` (works the same)
+- **Command**: `python .kiro/scripts/commit_buddy.py --from-diff`
 
 ### How to use in other projects?
 Simply copy the `.kiro/` folder to any other Git repository and it will work there too.
@@ -194,7 +193,7 @@ echo $GROQ_API_KEY
    git add test.txt
    
    # Test the command
-   kiro commit --from-diff
+   python .kiro/scripts/commit_buddy.py --from-diff
    ```
 
 ### Step 6: Advanced configuration (Optional)
@@ -338,7 +337,7 @@ def verify_installation():
     print("\nNext steps:")
     print("1. Make some changes to your code")
     print("2. Add them to staging: git add .")
-    print("3. Run: kiro commit --from-diff")
+    print("3. Run: python .kiro/scripts/commit_buddy.py --from-diff")
     
     return True
 

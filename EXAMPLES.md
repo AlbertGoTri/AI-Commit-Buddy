@@ -14,7 +14,7 @@ echo "print('Hello, World!')" > hello.py
 git add hello.py
 
 # 3. Generate commit with AI
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 **Expected output:**
@@ -41,7 +41,7 @@ Use this message? (y/n/e to edit): y
 git add calculator.py
 
 # 3. Generate commit
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 **Expected output:**
@@ -59,12 +59,12 @@ Use this message? (y/n/e to edit): y
 ```bash
 # Add new authentication function
 git add auth.py login.html
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "feat: add user authentication system"
 
 # Add API endpoint
 git add api/users.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "feat: add users API endpoint"
 ```
 
@@ -73,12 +73,12 @@ kiro commit --from-diff
 ```bash
 # Fix validation error
 git add validation.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "fix: correct email validation regex"
 
 # Fix memory problem
 git add memory_manager.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "fix: resolve memory leak in cache"
 ```
 
@@ -87,12 +87,12 @@ kiro commit --from-diff
 ```bash
 # Update README
 git add README.md
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "docs: update installation instructions"
 
 # Add code comments
 git add complex_algorithm.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "docs: add comments to sorting algorithm"
 ```
 
@@ -101,12 +101,12 @@ kiro commit --from-diff
 ```bash
 # Reorganize code
 git add utils.py helpers.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "refactor: extract utility functions to separate module"
 
 # Improve class structure
 git add models/user.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "refactor: simplify user model structure"
 ```
 
@@ -115,12 +115,12 @@ kiro commit --from-diff
 ```bash
 # Add unit tests
 git add test_calculator.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "test: add unit tests for calculator functions"
 
 # Update existing tests
 git add test_auth.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "test: update authentication test cases"
 ```
 
@@ -129,12 +129,12 @@ kiro commit --from-diff
 ```bash
 # Update dependencies
 git add requirements.txt
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "chore: update project dependencies"
 
 # Build configuration
 git add .github/workflows/ci.yml
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Result: "chore: configure CI/CD pipeline"
 ```
 
@@ -143,7 +143,7 @@ kiro commit --from-diff
 ### Confirm message (y)
 
 ```bash
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Proposed message: "feat: add user dashboard"
 # Use this message? (y/n/e to edit): y
 # ✅ Commit created successfully
@@ -152,7 +152,7 @@ kiro commit --from-diff
 ### Reject message (n)
 
 ```bash
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Proposed message: "chore: update files"
 # Use this message? (y/n/e to edit): n
 # ❌ Commit cancelled
@@ -161,7 +161,7 @@ kiro commit --from-diff
 ### Edit message (e)
 
 ```bash
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Proposed message: "feat: add login"
 # Use this message? (y/n/e to edit): e
 # Edit message: feat: implement secure user login system
@@ -174,7 +174,7 @@ kiro commit --from-diff
 
 ```bash
 git add multiple_files.py config.json
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 **Output:**
@@ -193,7 +193,7 @@ Edit message: feat: add configuration management system
 
 ```bash
 # Without GROQ_API_KEY configured
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 **Output:**
@@ -216,25 +216,25 @@ git checkout -b feature/user-profile
 # 2. Implement basic functionality
 echo "class UserProfile: pass" > user_profile.py
 git add user_profile.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add user profile model"
 
 # 3. Add validations
 # Edit user_profile.py to add validations
 git add user_profile.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add validation to user profile"
 
 # 4. Add tests
 echo "def test_user_profile(): pass" > test_user_profile.py
 git add test_user_profile.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "test: add user profile tests"
 
 # 5. Document
 echo "# User Profile\n\nManages user profiles..." > docs/user_profile.md
 git add docs/user_profile.md
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "docs: add user profile documentation"
 ```
 
@@ -247,17 +247,17 @@ git checkout -b fix/login-error
 # 2. Identify and fix the problem
 # Edit auth.py to fix the bug
 git add auth.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "fix: resolve login timeout issue"
 
 # 3. Add test to prevent regression
 git add test_auth.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "test: add test for login timeout scenario"
 
 # 4. Update documentation if necessary
 git add README.md
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "docs: update troubleshooting section"
 ```
 
@@ -266,17 +266,17 @@ kiro commit --from-diff
 ```bash
 # 1. Extract common functions
 git add utils.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "refactor: extract common utilities"
 
 # 2. Update imports in existing files
 git add main.py auth.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "refactor: update imports to use new utilities"
 
 # 3. Remove duplicate code
 git add legacy_utils.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "refactor: remove duplicate utility functions"
 ```
 
@@ -287,11 +287,11 @@ kiro commit --from-diff
 ```bash
 # ✅ Good: One logical change per commit
 git add user_model.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add user model"
 
 git add user_controller.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add user controller"
 
 # ❌ Avoid: Multiple unrelated changes
@@ -303,11 +303,11 @@ kiro commit --from-diff
 ```bash
 # Add only specific parts of a file
 git add -p complex_file.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 
 # Add specific files
 git add src/models/user.py src/controllers/user.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### 3. Review changes before commit
@@ -317,13 +317,13 @@ kiro commit --from-diff
 git diff --staged
 
 # Generate commit
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### 4. Use editing when necessary
 
 ```bash
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # If the generated message is: "chore: update files"
 # Use 'e' to edit it to something more descriptive:
 # "feat: implement user authentication middleware"
@@ -336,17 +336,17 @@ kiro commit --from-diff
 ```bash
 # Add new class
 git add models/product.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add product model with validation"
 
 # Update requirements
 git add requirements.txt
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "chore: update dependencies to latest versions"
 
 # Fix import
 git add __init__.py
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "fix: correct module imports in package"
 ```
 
@@ -355,17 +355,17 @@ kiro commit --from-diff
 ```bash
 # New React component
 git add components/UserCard.jsx
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "feat: add user card component"
 
 # Update package.json
 git add package.json package-lock.json
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "chore: update npm dependencies"
 
 # Fix bug in async function
 git add api/users.js
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "fix: handle async errors in user API"
 ```
 
@@ -374,17 +374,17 @@ kiro commit --from-diff
 ```bash
 # Docker configuration
 git add Dockerfile docker-compose.yml
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "chore: add Docker configuration"
 
 # CI/CD pipeline
 git add .github/workflows/deploy.yml
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "chore: configure deployment pipeline"
 
 # Environment variables
 git add .env.example
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "chore: add environment variables template"
 ```
 
@@ -420,11 +420,11 @@ If you work on different types of projects, you can edit messages to better adap
 
 ```bash
 # For API projects
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Edit: "feat: add user endpoint" → "feat: add GET /api/users endpoint"
 
 # For frontend projects
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # Edit: "feat: add component" → "feat: add responsive user profile component"
 ```
 
