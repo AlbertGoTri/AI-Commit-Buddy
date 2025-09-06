@@ -93,11 +93,11 @@ class CommitBuddy:
             # Step 2: Check for staged changes with detailed feedback
             has_changes, status_msg, changed_files = self.git_ops.check_staged_changes()
             if not has_changes:
-                if "not staged" in status_msg:
+                if status_msg and "not staged" in status_msg:
                     self.ui.show_warning(status_msg)
                     self.ui.show_info("Suggestion: Use 'git add <file>' to stage specific changes or 'git add .' to stage all changes.")
                 else:
-                    self.ui.show_info(status_msg)
+                    self.ui.show_info(status_msg or "No staged changes found")
                 return 0
 
             self.ui.show_info(status_msg)

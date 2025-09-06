@@ -23,7 +23,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'rev-parse', '--git-dir'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=5
             )
             return result.returncode == 0
@@ -46,7 +47,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', '--version'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=5
             )
             if result.returncode != 0:
@@ -63,7 +65,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'rev-parse', '--git-dir'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=5
             )
             if result.returncode != 0:
@@ -84,7 +87,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=10
             )
             if result.returncode != 0:
@@ -99,11 +103,12 @@ class GitOperations:
     def get_staged_diff(self) -> str:
         """Get the diff of staged changes"""
         try:
-            # First try normal diff
+            # First try normal diff with proper encoding handling
             result = subprocess.run(
                 ['git', 'diff', '--staged'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=10
             )
             
@@ -111,12 +116,13 @@ class GitOperations:
             if result.returncode == 0:
                 diff_output = result.stdout
                 
-                if "Binary files" in diff_output and "differ" in diff_output:
+                if diff_output and "Binary files" in diff_output and "differ" in diff_output:
                     # Force text diff for better analysis
                     result = subprocess.run(
                         ['git', 'diff', '--staged', '--text'],
                         capture_output=True,
-                        text=True,
+                        encoding='utf-8',
+                        errors='replace',
                         timeout=10
                     )
                     diff_output = result.stdout
@@ -125,7 +131,8 @@ class GitOperations:
                 diff_output = self._clean_diff_output(diff_output)
                 return diff_output
             else:
-                raise GitOperationError(f"Error getting diff: {result.stderr.strip()}")
+                stderr_msg = result.stderr.strip() if result.stderr else "Unknown error"
+                raise GitOperationError(f"Error getting diff: {stderr_msg}")
         except subprocess.TimeoutExpired:
             raise GitOperationError("Timeout getting staged changes diff")
         except FileNotFoundError:
@@ -156,7 +163,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'diff', '--staged', '--name-only'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=10
             )
 
@@ -170,7 +178,8 @@ class GitOperations:
                 unstaged_result = subprocess.run(
                     ['git', 'diff', '--name-only'],
                     capture_output=True,
-                    text=True,
+                    encoding='utf-8',
+                    errors='replace',
                     timeout=10
                 )
 
@@ -196,7 +205,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'diff', '--staged', '--name-only'],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=10
             )
             if result.returncode == 0:
@@ -218,7 +228,8 @@ class GitOperations:
             result = subprocess.run(
                 ['git', 'commit', '-m', message],
                 capture_output=True,
-                text=True,
+                encoding='utf-8',
+                errors='replace',
                 timeout=15
             )
 
@@ -228,7 +239,8 @@ class GitOperations:
                     hash_result = subprocess.run(
                         ['git', 'rev-parse', 'HEAD'],
                         capture_output=True,
-                        text=True,
+                        encoding='utf-8',
+                        errors='replace',
                         timeout=5
                     )
                     if hash_result.returncode == 0:
