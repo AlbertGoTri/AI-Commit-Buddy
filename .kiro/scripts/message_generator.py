@@ -107,7 +107,7 @@ class MessageGenerator:
                 elif 'rate limit' in error_msg:
                     # Rate limit errors should be reported but are recoverable
                     self.logger.warning("Rate limit error, re-raising", "MSG_GEN")
-                    raise GroqAPIError("Límite de API excedido. Intenta nuevamente en unos minutos o usa el mensaje de respaldo.")
+                    raise GroqAPIError("API rate limit exceeded. Try again in a few minutes or use the fallback message.")
                 else:
                     # Other API errors can fall back silently
                     self.logger.log_fallback_trigger(f"API error: {str(e)}", {

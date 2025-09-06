@@ -34,7 +34,7 @@ class TestGitErrorHandling(unittest.TestCase):
         is_valid, error_msg = self.git_ops.validate_git_environment()
         
         self.assertFalse(is_valid)
-        self.assertIn("Git no está instalado", error_msg)
+        self.assertIn("Git is not installed", error_msg)
     
     @patch('subprocess.run')
     def test_validate_git_environment_not_git_repo(self, mock_run):
@@ -48,7 +48,7 @@ class TestGitErrorHandling(unittest.TestCase):
         is_valid, error_msg = self.git_ops.validate_git_environment()
         
         self.assertFalse(is_valid)
-        self.assertIn("No estás en un repositorio Git", error_msg)
+        self.assertIn("You are not in a Git repository", error_msg)
     
     @patch('subprocess.run')
     def test_get_staged_diff_no_changes(self, mock_run):
@@ -67,7 +67,7 @@ class TestGitErrorHandling(unittest.TestCase):
         with self.assertRaises(GitOperationError) as context:
             self.git_ops.get_staged_diff()
         
-        self.assertIn("Error obteniendo diff", str(context.exception))
+        self.assertIn("Error getting diff", str(context.exception))
     
     @patch('subprocess.run')
     def test_commit_with_message_failure(self, mock_run):
@@ -77,7 +77,7 @@ class TestGitErrorHandling(unittest.TestCase):
         success, error_msg = self.git_ops.commit_with_message("test commit")
         
         self.assertFalse(success)
-        self.assertIn("Error ejecutando commit", error_msg)
+        self.assertIn("Error executing commit", error_msg)
 
 
 class TestGroqAPIErrorHandling(unittest.TestCase):
@@ -198,7 +198,7 @@ class TestCommitBuddyErrorHandling(unittest.TestCase):
     @patch.object(GitOperations, 'validate_git_environment')
     def test_handle_from_diff_invalid_git_env(self, mock_validate):
         """Test error handling for invalid Git environment"""
-        mock_validate.return_value = (False, "No estás en un repositorio Git")
+        mock_validate.return_value = (False, "You are not in a Git repository")
         
         result = self.commit_buddy.handle_from_diff()
         
@@ -233,7 +233,7 @@ class TestCommitBuddyErrorHandling(unittest.TestCase):
         mock_diff.return_value = "test diff"
         mock_generate.return_value = "feat: add test feature"
         mock_show.return_value = 'y'  # User confirms
-        mock_commit.return_value = (False, "Error ejecutando commit")
+        mock_commit.return_value = (False, "Error executing commit")
         
         result = self.commit_buddy.handle_from_diff()
         

@@ -1,300 +1,300 @@
-# Guía de Solución de Problemas - Kiro Commit Buddy
+# Troubleshooting Guide - Kiro Commit Buddy
 
-Esta guía te ayudará a resolver los problemas más comunes que puedes encontrar al usar Kiro Commit Buddy.
+This guide will help you resolve the most common problems you may encounter when using Kiro Commit Buddy.
 
-## 🔍 Diagnóstico rápido
+## 🔍 Quick diagnosis
 
-Antes de revisar problemas específicos, ejecuta estos comandos para verificar tu configuración:
+Before reviewing specific problems, run these commands to verify your configuration:
 
 ```bash
-# Verificar que estás en un repositorio Git
+# Verify that you are in a Git repository
 git status
 
-# Verificar que tienes cambios staged
+# Verify that you have staged changes
 git diff --staged
 
-# Verificar tu API key (Windows PowerShell)
+# Verify your API key (Windows PowerShell)
 echo $env:GROQ_API_KEY
 
-# Verificar tu API key (Linux/Mac)
+# Verify your API key (Linux/Mac)
 echo $GROQ_API_KEY
 
-# Verificar que Python puede importar las dependencias
-python -c "import requests, colorama; print('Dependencias OK')"
+# Verify that Python can import dependencies
+python -c "import requests, colorama; print('Dependencies OK')"
 ```
 
-## 🚨 Problemas comunes
+## 🚨 Common problems
 
-### 1. Error: "No estás en un repositorio Git"
+### 1. Error: "You are not in a Git repository"
 
-**Síntomas:**
+**Symptoms:**
 ```
-Error: No estás en un repositorio Git
-Asegúrate de ejecutar este comando desde un directorio que contenga un repositorio Git.
+Error: You are not in a Git repository
+Make sure to run this command from a directory that contains a Git repository.
 ```
 
-**Causas posibles:**
-- Ejecutando el comando fuera de un repositorio Git
-- El directorio `.git` está corrupto o no existe
+**Possible causes:**
+- Running the command outside of a Git repository
+- The `.git` directory is corrupted or doesn't exist
 
-**Soluciones:**
-1. Navega a tu repositorio Git:
+**Solutions:**
+1. Navigate to your Git repository:
    ```bash
-   cd /ruta/a/tu/proyecto
+   cd /path/to/your/project
    ```
 
-2. Verifica que es un repositorio Git válido:
+2. Verify that it's a valid Git repository:
    ```bash
    git status
    ```
 
-3. Si no es un repositorio, inicialízalo:
+3. If it's not a repository, initialize it:
    ```bash
    git init
    ```
 
-### 2. Error: "No hay cambios staged para commit"
+### 2. Error: "No staged changes for commit"
 
-**Síntomas:**
+**Symptoms:**
 ```
-No hay cambios staged para commit.
-Usa 'git add <archivo>' para añadir cambios al área de staging.
+No staged changes for commit.
+Use 'git add <file>' to add changes to the staging area.
 ```
 
-**Causas posibles:**
-- No has añadido archivos al área de staging
-- Todos los cambios ya están committed
+**Possible causes:**
+- You haven't added files to the staging area
+- All changes are already committed
 
-**Soluciones:**
-1. Verifica el estado de tu repositorio:
+**Solutions:**
+1. Check the status of your repository:
    ```bash
    git status
    ```
 
-2. Añade archivos al staging:
+2. Add files to staging:
    ```bash
-   git add archivo1.py archivo2.js
-   # o para añadir todos los cambios:
+   git add file1.py file2.js
+   # or to add all changes:
    git add .
    ```
 
-3. Verifica que tienes cambios staged:
+3. Verify that you have staged changes:
    ```bash
    git diff --staged
    ```
 
-### 3. Error: "GROQ_API_KEY no configurada"
+### 3. Error: "GROQ_API_KEY not configured"
 
-**Síntomas:**
+**Symptoms:**
 ```
-GROQ_API_KEY no está configurada.
-Para configurarla:
-  Windows: set GROQ_API_KEY=tu_api_key
-  Linux/Mac: export GROQ_API_KEY=tu_api_key
+GROQ_API_KEY is not configured.
+To configure it:
+  Windows: set GROQ_API_KEY=your_api_key
+  Linux/Mac: export GROQ_API_KEY=your_api_key
 ```
 
-**Soluciones:**
+**Solutions:**
 
 #### Windows (PowerShell):
 ```powershell
-# Temporal (solo para la sesión actual)
-$env:GROQ_API_KEY = "gsk_tu_api_key_aqui"
+# Temporary (only for current session)
+$env:GROQ_API_KEY = "gsk_your_api_key_here"
 
-# Permanente (para el usuario actual)
-[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "gsk_tu_api_key_aqui", "User")
+# Permanent (for current user)
+[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "gsk_your_api_key_here", "User")
 
-# Verificar
+# Verify
 echo $env:GROQ_API_KEY
 ```
 
 #### Windows (CMD):
 ```cmd
-# Temporal
-set GROQ_API_KEY=gsk_tu_api_key_aqui
+# Temporary
+set GROQ_API_KEY=gsk_your_api_key_here
 
-# Permanente: Panel de Control > Sistema > Configuración avanzada > Variables de entorno
+# Permanent: Control Panel > System > Advanced settings > Environment Variables
 ```
 
 #### Linux/macOS:
 ```bash
-# Temporal
-export GROQ_API_KEY="gsk_tu_api_key_aqui"
+# Temporary
+export GROQ_API_KEY="gsk_your_api_key_here"
 
-# Permanente (añadir a ~/.bashrc o ~/.zshrc)
-echo 'export GROQ_API_KEY="gsk_tu_api_key_aqui"' >> ~/.bashrc
+# Permanent (add to ~/.bashrc or ~/.zshrc)
+echo 'export GROQ_API_KEY="gsk_your_api_key_here"' >> ~/.bashrc
 source ~/.bashrc
 
-# Verificar
+# Verify
 echo $GROQ_API_KEY
 ```
 
-### 4. Error: "API key inválida"
+### 4. Error: "Invalid API key"
 
-**Síntomas:**
+**Symptoms:**
 ```
-Error de autenticación con Groq API
-Verifica que tu GROQ_API_KEY sea correcta
+Authentication error with Groq API
+Verify that your GROQ_API_KEY is correct
 ```
 
-**Causas posibles:**
-- API key incorrecta o expirada
-- API key con formato incorrecto
-- Espacios extra en la API key
+**Possible causes:**
+- Incorrect or expired API key
+- API key with incorrect format
+- Extra spaces in the API key
 
-**Soluciones:**
-1. Verifica el formato de tu API key:
-   - Debe comenzar con `gsk_`
-   - No debe contener espacios
-   - Debe tener al menos 40 caracteres
+**Solutions:**
+1. Verify your API key format:
+   - Must start with `gsk_`
+   - Must not contain spaces
+   - Must be at least 40 characters long
 
-2. Genera una nueva API key:
-   - Ve a [console.groq.com](https://console.groq.com)
-   - Navega a "API Keys"
-   - Crea una nueva key
-   - Reemplaza la anterior
+2. Generate a new API key:
+   - Go to [console.groq.com](https://console.groq.com)
+   - Navigate to "API Keys"
+   - Create a new key
+   - Replace the previous one
 
-3. Verifica que no hay espacios extra:
+3. Verify there are no extra spaces:
    ```bash
    # Linux/Mac
    export GROQ_API_KEY="$(echo $GROQ_API_KEY | tr -d ' ')"
    ```
 
-### 5. Error: "Timeout de conexión"
+### 5. Error: "Connection timeout"
 
-**Síntomas:**
+**Symptoms:**
 ```
-⚠️ API no disponible, generando mensaje básico...
+⚠️ API not available, generating basic message...
 Error: Connection timeout
 ```
 
-**Causas posibles:**
-- Problemas de conectividad a internet
-- Firewall bloqueando la conexión
-- Servidor de Groq temporalmente no disponible
+**Possible causes:**
+- Internet connectivity problems
+- Firewall blocking the connection
+- Groq server temporarily unavailable
 
-**Soluciones:**
-1. Verifica tu conexión a internet:
+**Solutions:**
+1. Check your internet connection:
    ```bash
    ping google.com
    ```
 
-2. Verifica que puedes acceder a Groq:
+2. Verify that you can access Groq:
    ```bash
    curl -I https://api.groq.com
    ```
 
-3. Si estás detrás de un firewall corporativo, contacta a tu administrador de sistemas
+3. If you're behind a corporate firewall, contact your system administrator
 
-4. La herramienta automáticamente usará el modo fallback, que sigue funcionando
+4. The tool will automatically use fallback mode, which continues working
 
 ### 6. Error: "ModuleNotFoundError"
 
-**Síntomas:**
+**Symptoms:**
 ```
 ModuleNotFoundError: No module named 'requests'
 ModuleNotFoundError: No module named 'colorama'
 ```
 
-**Causas posibles:**
-- Dependencias no instaladas
-- Usando el Python incorrecto (múltiples versiones)
-- Entorno virtual no activado
+**Possible causes:**
+- Dependencies not installed
+- Using the wrong Python (multiple versions)
+- Virtual environment not activated
 
-**Soluciones:**
-1. Instala las dependencias:
+**Solutions:**
+1. Install dependencies:
    ```bash
    pip install -r .kiro/scripts/requirements.txt
    ```
 
-2. Si usas múltiples versiones de Python:
+2. If you use multiple Python versions:
    ```bash
    python3 -m pip install -r .kiro/scripts/requirements.txt
    ```
 
-3. Si usas un entorno virtual:
+3. If you use a virtual environment:
    ```bash
-   # Activar el entorno virtual primero
+   # Activate the virtual environment first
    source venv/bin/activate  # Linux/Mac
-   # o
+   # or
    venv\Scripts\activate     # Windows
    
-   # Luego instalar
+   # Then install
    pip install -r .kiro/scripts/requirements.txt
    ```
 
 ### 7. Error: "Permission denied"
 
-**Síntomas (Windows):**
+**Symptoms (Windows):**
 ```
 cannot be loaded because running scripts is disabled on this system
 ```
 
-**Solución:**
+**Solution:**
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### 8. El mensaje generado no es apropiado
+### 8. Generated message is not appropriate
 
-**Síntomas:**
-- El mensaje no refleja los cambios
-- El prefijo de tipo es incorrecto
-- El mensaje está en inglés en lugar de español
+**Symptoms:**
+- The message doesn't reflect the changes
+- The type prefix is incorrect
+- The message is in the wrong language
 
-**Soluciones:**
-1. Usa la opción de edición:
+**Solutions:**
+1. Use the edit option:
    ```
-   ¿Usar este mensaje? (y/n/e para editar): e
+   Use this message? (y/n/e to edit): e
    ```
 
-2. Verifica que tus cambios staged son claros:
+2. Verify that your staged changes are clear:
    ```bash
    git diff --staged
    ```
 
-3. Si el problema persiste, reporta el issue con:
-   - El diff que causó el problema
-   - El mensaje generado
-   - El mensaje esperado
+3. If the problem persists, report the issue with:
+   - The diff that caused the problem
+   - The generated message
+   - The expected message
 
-### 9. Kiro no reconoce el comando
+### 9. Kiro doesn't recognize the command
 
-**Síntomas:**
+**Symptoms:**
 ```
 Command not found: commit
 ```
 
-**Causas posibles:**
-- El archivo de hook no está en el lugar correcto
-- Kiro no ha recargado la configuración
+**Possible causes:**
+- The hook file is not in the correct location
+- Kiro hasn't reloaded the configuration
 
-**Soluciones:**
-1. Verifica que existe el archivo de hook:
+**Solutions:**
+1. Verify that the hook file exists:
    ```bash
    ls .kiro/hooks/commit.yml
    ```
 
-2. Verifica el contenido del hook:
+2. Verify the hook content:
    ```bash
    cat .kiro/hooks/commit.yml
    ```
 
-3. Reinicia Kiro o recarga la configuración
+3. Restart Kiro or reload the configuration
 
-4. Verifica que el archivo Python es ejecutable:
+4. Verify that the Python file is executable:
    ```bash
    python .kiro/scripts/commit_buddy.py --help
    ```
 
-## 🔧 Herramientas de diagnóstico
+## 🔧 Diagnostic tools
 
-### Script de diagnóstico
+### Diagnostic script
 
-Crea este script para diagnosticar problemas automáticamente:
+Create this script to automatically diagnose problems:
 
 ```python
 #!/usr/bin/env python3
-"""Diagnóstico de Kiro Commit Buddy"""
+"""Kiro Commit Buddy Diagnostics"""
 
 import os
 import sys
@@ -307,7 +307,7 @@ def check_git():
         print("✅ Git repository: OK")
         return True
     except:
-        print("❌ Git repository: No encontrado")
+        print("❌ Git repository: Not found")
         return False
 
 def check_staged_changes():
@@ -317,24 +317,24 @@ def check_staged_changes():
             print("✅ Staged changes: OK")
             return True
         else:
-            print("⚠️  Staged changes: No hay cambios staged")
+            print("⚠️  Staged changes: No staged changes")
             return False
     except:
-        print("❌ Staged changes: Error al verificar")
+        print("❌ Staged changes: Error verifying")
         return False
 
 def check_api_key():
     api_key = os.getenv('GROQ_API_KEY')
     if not api_key:
-        print("❌ GROQ_API_KEY: No configurada")
+        print("❌ GROQ_API_KEY: Not configured")
         return False
     
     if not api_key.startswith('gsk_'):
-        print("❌ GROQ_API_KEY: Formato incorrecto (debe empezar con 'gsk_')")
+        print("❌ GROQ_API_KEY: Incorrect format (must start with 'gsk_')")
         return False
     
     if len(api_key) < 40:
-        print("❌ GROQ_API_KEY: Muy corta")
+        print("❌ GROQ_API_KEY: Too short")
         return False
     
     print("✅ GROQ_API_KEY: OK")
@@ -362,13 +362,13 @@ def check_files():
         if Path(file).exists():
             print(f"✅ {file}: OK")
         else:
-            print(f"❌ {file}: No encontrado")
+            print(f"❌ {file}: Not found")
             all_ok = False
     
     return all_ok
 
 if __name__ == "__main__":
-    print("🔍 Diagnóstico de Kiro Commit Buddy\n")
+    print("🔍 Kiro Commit Buddy Diagnostics\n")
     
     checks = [
         check_git(),
@@ -379,49 +379,49 @@ if __name__ == "__main__":
     ]
     
     if all(checks):
-        print("\n🎉 Todo parece estar configurado correctamente!")
+        print("\n🎉 Everything seems to be configured correctly!")
     else:
-        print("\n⚠️  Se encontraron algunos problemas. Revisa los errores arriba.")
+        print("\n⚠️  Some problems were found. Review the errors above.")
 ```
 
-### Logs de debug
+### Debug logs
 
-Para obtener más información sobre errores, puedes modificar temporalmente el archivo de configuración para habilitar logs detallados.
+To get more information about errors, you can temporarily modify the configuration file to enable detailed logs.
 
-## 📞 Obtener ayuda adicional
+## 📞 Get additional help
 
-Si ninguna de estas soluciones funciona:
+If none of these solutions work:
 
-1. **Ejecuta el diagnóstico** usando el script de arriba
-2. **Recopila información**:
-   - Sistema operativo y versión
-   - Versión de Python (`python --version`)
-   - Versión de Git (`git --version`)
-   - Contenido de `.kiro/hooks/commit.yml`
-   - Mensaje de error completo
+1. **Run the diagnostic** using the script above
+2. **Gather information**:
+   - Operating system and version
+   - Python version (`python --version`)
+   - Git version (`git --version`)
+   - Content of `.kiro/hooks/commit.yml`
+   - Complete error message
 
-3. **Busca en issues existentes** en el repositorio del proyecto
+3. **Search existing issues** in the project repository
 
-4. **Crea un nuevo issue** con toda la información recopilada
+4. **Create a new issue** with all the gathered information
 
-## 🔄 Reinstalación completa
+## 🔄 Complete reinstallation
 
-Si todo lo demás falla, puedes hacer una reinstalación completa:
+If everything else fails, you can do a complete reinstallation:
 
 ```bash
-# 1. Respaldar configuración actual
+# 1. Backup current configuration
 cp .kiro/hooks/commit.yml commit.yml.backup
 
-# 2. Limpiar instalación anterior
+# 2. Clean previous installation
 rm -rf .kiro/scripts/__pycache__
 
-# 3. Reinstalar dependencias
+# 3. Reinstall dependencies
 pip uninstall -y requests colorama
 pip install -r .kiro/scripts/requirements.txt
 
-# 4. Verificar instalación
+# 4. Verify installation
 python .kiro/scripts/commit_buddy.py --help
 
-# 5. Restaurar configuración
+# 5. Restore configuration
 cp commit.yml.backup .kiro/hooks/commit.yml
 ```

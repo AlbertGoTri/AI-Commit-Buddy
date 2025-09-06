@@ -44,10 +44,10 @@ class Config:
         if not self.has_groq_api_key():
             raise ValueError(
                 "GROQ_API_KEY environment variable is not configured.\n"
-                "Para configurarla:\n"
-                "  Windows: set GROQ_API_KEY=tu_api_key\n"
-                "  Linux/Mac: export GROQ_API_KEY=tu_api_key\n"
-                "Obtén tu API key en: https://console.groq.com/keys"
+                "To configure it:\n"
+                "  Windows: set GROQ_API_KEY=your_api_key\n"
+                "  Linux/Mac: export GROQ_API_KEY=your_api_key\n"
+                "Get your API key at: https://console.groq.com/keys"
             )
         return self.GROQ_API_KEY.strip()
 
@@ -57,19 +57,19 @@ class Config:
         Returns: (is_valid, error_message)
         """
         if not self.has_groq_api_key():
-            return False, "GROQ_API_KEY no está configurada"
+            return False, "GROQ_API_KEY is not configured"
 
         api_key = self.GROQ_API_KEY.strip()
 
         # Basic format validation
         if len(api_key) < 10:
-            return False, "GROQ_API_KEY parece ser demasiado corta"
+            return False, "GROQ_API_KEY appears to be too short"
 
         if not api_key.startswith('gsk_'):
-            return False, "GROQ_API_KEY debe comenzar con 'gsk_'"
+            return False, "GROQ_API_KEY must start with 'gsk_'"
 
         if ' ' in api_key:
-            return False, "GROQ_API_KEY no debe contener espacios"
+            return False, "GROQ_API_KEY must not contain spaces"
 
         return True, ""
 
@@ -82,41 +82,41 @@ class Config:
 
     def get_commit_prompt_template(self) -> str:
         """Get the prompt template for commit message generation"""
-        return """Analiza cuidadosamente el siguiente git diff y genera un mensaje de commit específico y descriptivo siguiendo Conventional Commits.
+        return """Carefully analyze the following git diff and generate a specific and descriptive commit message following Conventional Commits.
 
-INSTRUCCIONES IMPORTANTES:
-1. Lee el diff línea por línea para entender QUÉ se está cambiando exactamente
-2. Identifica elementos específicos como: botones, funciones, clases, texto, estilos, etc.
-3. Describe la acción específica, no uses términos genéricos como "actualiza" o "modifica"
-4. Sé descriptivo sobre QUÉ se añade, elimina o cambia
+IMPORTANT INSTRUCTIONS:
+1. Read the diff line by line to understand WHAT is being changed exactly
+2. Identify specific elements like: buttons, functions, classes, text, styles, etc.
+3. Describe the specific action, don't use generic terms like "updates" or "modifies"
+4. Be descriptive about WHAT is being added, removed or changed
 
-PREFIJOS:
-- feat: nueva funcionalidad (botones, formularios, páginas, funciones)
-- fix: corrección de errores
-- docs: documentación (README, comentarios)
-- style: cambios de estilo/formato (CSS, indentación)
-- refactor: reestructuración de código
-- test: añadir o modificar tests
-- chore: tareas de mantenimiento
+PREFIXES:
+- feat: new functionality (buttons, forms, pages, functions)
+- fix: bug fixes
+- docs: documentation (README, comments)
+- style: style/format changes (CSS, indentation)
+- refactor: code restructuring
+- test: add or modify tests
+- chore: maintenance tasks
 
-EJEMPLOS DE BUENOS MENSAJES:
-- "feat: añade botón de contacto en header"
-- "feat: implementa formulario de login"
-- "fix: corrige validación de email"
-- "style: mejora espaciado en navegación"
-- "docs: añade comentarios a función calcular"
+EXAMPLES OF GOOD MESSAGES:
+- "feat: add contact button in header"
+- "feat: implement login form"
+- "fix: correct email validation"
+- "style: improve navigation spacing"
+- "docs: add comments to calculate function"
 
-EJEMPLOS DE MALOS MENSAJES (evitar):
-- "docs: actualiza index.html"
-- "feat: modifica archivo"
-- "chore: cambios varios"
+EXAMPLES OF BAD MESSAGES (avoid):
+- "docs: update index.html"
+- "feat: modify file"
+- "chore: various changes"
 
-Diff a analizar:
+Diff to analyze:
 {diff}
 
-RESPONDE ÚNICAMENTE CON EL MENSAJE DE COMMIT. NO incluyas explicaciones, justificaciones o texto adicional.
+RESPOND ONLY WITH THE COMMIT MESSAGE. DO NOT include explanations, justifications or additional text.
 
-Formato requerido: "prefijo: descripción específica"
-Máximo 50 caracteres.
+Required format: "prefix: specific description"
+Maximum 50 characters.
 
-Mensaje de commit:"""
+Commit message:"""

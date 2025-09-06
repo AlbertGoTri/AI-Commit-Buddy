@@ -50,7 +50,7 @@ class UserInterface:
         """
         print()
         icon = "📝" if self.use_emoji else ">>>"
-        print(self._colorize(f"{icon} Mensaje de commit propuesto:", Fore.CYAN, Style.BRIGHT))
+        print(self._colorize(f"{icon} Proposed commit message:", Fore.CYAN, Style.BRIGHT))
         print()
 
         # Display the message with highlighting
@@ -59,23 +59,23 @@ class UserInterface:
 
         # Show options with colors
         options_text = (
-            f"{self._colorize('y', Fore.GREEN, Style.BRIGHT)} = usar este mensaje  "
-            f"{self._colorize('n', Fore.RED, Style.BRIGHT)} = cancelar  "
-            f"{self._colorize('e', Fore.YELLOW, Style.BRIGHT)} = editar"
+            f"{self._colorize('y', Fore.GREEN, Style.BRIGHT)} = use this message  "
+            f"{self._colorize('n', Fore.RED, Style.BRIGHT)} = cancel  "
+            f"{self._colorize('e', Fore.YELLOW, Style.BRIGHT)} = edit"
         )
-        print(f"¿Usar este mensaje? ({options_text}): ", end="")
+        print(f"Use this message? ({options_text}): ", end="")
 
         while True:
             try:
                 response = input().lower().strip()
-                if response in ['y', 'yes', 'sí', 'si', '']:
+                if response in ['y', 'yes', '']:
                     return 'y'
                 elif response in ['n', 'no']:
                     return 'n'
-                elif response in ['e', 'edit', 'editar']:
+                elif response in ['e', 'edit']:
                     return 'e'
                 else:
-                    print(f"Por favor ingresa {self._colorize('y', Fore.GREEN)}, {self._colorize('n', Fore.RED)}, o {self._colorize('e', Fore.YELLOW)}: ", end="")
+                    print(f"Please enter {self._colorize('y', Fore.GREEN)}, {self._colorize('n', Fore.RED)}, or {self._colorize('e', Fore.YELLOW)}: ", end="")
             except (EOFError, KeyboardInterrupt):
                 print()
                 return 'n'
@@ -87,16 +87,16 @@ class UserInterface:
         """
         print()
         icon = "✏️" if self.use_emoji else "EDIT:"
-        print(self._colorize(f"{icon} Editando mensaje de commit:", Fore.YELLOW, Style.BRIGHT))
-        print(self._colorize("(Presiona Enter para una línea vacía y terminar, Ctrl+C para cancelar)", Fore.YELLOW))
+        print(self._colorize(f"{icon} Editing commit message:", Fore.YELLOW, Style.BRIGHT))
+        print(self._colorize("(Press Enter for an empty line to finish, Ctrl+C to cancel)", Fore.YELLOW))
         print()
 
         # Show current message
-        print(self._colorize("Mensaje actual:", Fore.CYAN))
+        print(self._colorize("Current message:", Fore.CYAN))
         print(f"  {message}")
         print()
 
-        print(self._colorize("Nuevo mensaje:", Fore.CYAN))
+        print(self._colorize("New message:", Fore.CYAN))
 
         lines = []
         try:
@@ -110,13 +110,13 @@ class UserInterface:
         except (EOFError, KeyboardInterrupt):
             print()
             cancel_icon = "❌" if self.use_emoji else "CANCELLED:"
-            print(self._colorize(f"{cancel_icon} Edición cancelada", Fore.RED))
+            print(self._colorize(f"{cancel_icon} Edit cancelled", Fore.RED))
             return None
 
         edited_message = "\n".join(lines).strip()
         if not edited_message:
             warning_icon = "❌" if self.use_emoji else "WARNING:"
-            print(self._colorize(f"{warning_icon} Mensaje vacío, usando mensaje original", Fore.YELLOW))
+            print(self._colorize(f"{warning_icon} Empty message, using original message", Fore.YELLOW))
             return message
 
         return edited_message
@@ -152,14 +152,14 @@ class UserInterface:
 
         print()
         folder_icon = "📁" if self.use_emoji else "FILES:"
-        print(self._colorize(f"{folder_icon} Archivos modificados:", Fore.CYAN, Style.BRIGHT))
+        print(self._colorize(f"{folder_icon} Modified files:", Fore.CYAN, Style.BRIGHT))
 
         for file in files[:5]:  # Show max 5 files
             print(f"  • {self._colorize(file, Fore.WHITE)}")
 
         if len(files) > 5:
             remaining = len(files) - 5
-            print(f"  ... y {self._colorize(str(remaining), Fore.YELLOW)} archivos más")
+            print(f"  ... and {self._colorize(str(remaining), Fore.YELLOW)} more files")
 
         if additions > 0 or deletions > 0:
             stats = []
@@ -182,7 +182,7 @@ class UserInterface:
             response = input(prompt).lower().strip()
             if response == "":
                 return default
-            return response in ['y', 'yes', 'sí', 'si']
+            return response in ['y', 'yes']
         except (EOFError, KeyboardInterrupt):
             print()
             return False

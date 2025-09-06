@@ -50,13 +50,13 @@ class GitOperations:
                 timeout=5
             )
             if result.returncode != 0:
-                return False, "Git no está instalado o no está disponible en el PATH"
+                return False, "Git is not installed or not available in PATH"
         except FileNotFoundError:
-            return False, "Git no está instalado. Por favor instala Git para continuar."
+            return False, "Git is not installed. Please install Git to continue."
         except subprocess.TimeoutExpired:
-            return False, "Timeout verificando la instalación de Git"
+            return False, "Timeout checking Git installation"
         except Exception as e:
-            return False, f"Error verificando Git: {str(e)}"
+            return False, f"Error checking Git: {str(e)}"
 
         try:
             # Check if we're in a Git repository
@@ -69,15 +69,15 @@ class GitOperations:
             if result.returncode != 0:
                 # Try to get more specific error information
                 if "not a git repository" in result.stderr.lower():
-                    return False, "No estás en un repositorio Git. Ejecuta 'git init' o navega a un repositorio existente."
+                    return False, "You are not in a Git repository. Run 'git init' or navigate to an existing repository."
                 else:
-                    return False, f"Error de Git: {result.stderr.strip() or 'Repositorio Git inválido'}"
+                    return False, f"Git error: {result.stderr.strip() or 'Invalid Git repository'}"
         except subprocess.TimeoutExpired:
-            return False, "Timeout verificando el repositorio Git"
+            return False, "Timeout checking Git repository"
         except PermissionError:
-            return False, "Sin permisos para acceder al repositorio Git"
+            return False, "No permissions to access Git repository"
         except Exception as e:
-            return False, f"Error verificando repositorio Git: {str(e)}"
+            return False, f"Error checking Git repository: {str(e)}"
 
         try:
             # Check if we can access the working directory
@@ -88,11 +88,11 @@ class GitOperations:
                 timeout=10
             )
             if result.returncode != 0:
-                return False, f"No se puede acceder al estado del repositorio: {result.stderr.strip()}"
+                return False, f"Cannot access repository status: {result.stderr.strip()}"
         except subprocess.TimeoutExpired:
-            return False, "Timeout verificando el estado del repositorio"
+            return False, "Timeout checking repository status"
         except Exception as e:
-            return False, f"Error verificando estado del repositorio: {str(e)}"
+            return False, f"Error checking repository status: {str(e)}"
 
         return True, ""
 
@@ -125,13 +125,13 @@ class GitOperations:
                 diff_output = self._clean_diff_output(diff_output)
                 return diff_output
             else:
-                raise GitOperationError(f"Error obteniendo diff: {result.stderr.strip()}")
+                raise GitOperationError(f"Error getting diff: {result.stderr.strip()}")
         except subprocess.TimeoutExpired:
-            raise GitOperationError("Timeout obteniendo diff de cambios staged")
+            raise GitOperationError("Timeout getting staged changes diff")
         except FileNotFoundError:
-            raise GitOperationError("Git no está disponible")
+            raise GitOperationError("Git is not available")
         except Exception as e:
-            raise GitOperationError(f"Error inesperado obteniendo diff: {str(e)}")
+            raise GitOperationError(f"Unexpected error getting diff: {str(e)}")
     
     def _clean_diff_output(self, diff: str) -> str:
         """Clean diff output from encoding issues"""
@@ -161,7 +161,7 @@ class GitOperations:
             )
 
             if result.returncode != 0:
-                return False, f"Error verificando cambios staged: {result.stderr.strip()}", []
+                return False, f"Error checking staged changes: {result.stderr.strip()}", []
 
             staged_files = [f.strip() for f in result.stdout.split('\n') if f.strip()]
 
@@ -177,18 +177,18 @@ class GitOperations:
                 if unstaged_result.returncode == 0:
                     unstaged_files = [f.strip() for f in unstaged_result.stdout.split('\n') if f.strip()]
                     if unstaged_files:
-                        return False, f"No hay cambios staged. Hay {len(unstaged_files)} archivo(s) modificado(s) sin stage. Usa 'git add' para stagear los cambios.", unstaged_files
+                        return False, f"No staged changes. There are {len(unstaged_files)} modified file(s) not staged. Use 'git add' to stage changes.", unstaged_files
                     else:
-                        return False, "No hay cambios para commit. El directorio de trabajo está limpio.", []
+                        return False, "No changes to commit. Working directory is clean.", []
                 else:
-                    return False, "No hay cambios staged para commit. Usa 'git add <archivo>' para stagear cambios.", []
+                    return False, "No staged changes for commit. Use 'git add <file>' to stage changes.", []
 
-            return True, f"Encontrados {len(staged_files)} archivo(s) staged para commit", staged_files
+            return True, f"Found {len(staged_files)} file(s) staged for commit", staged_files
 
         except subprocess.TimeoutExpired:
-            return False, "Timeout verificando cambios staged", []
+            return False, "Timeout checking staged changes", []
         except Exception as e:
-            return False, f"Error verificando cambios: {str(e)}", []
+            return False, f"Error checking changes: {str(e)}", []
 
     def get_changed_files(self) -> List[str]:
         """Get list of changed files"""
@@ -212,7 +212,7 @@ class GitOperations:
         Returns: (success, error_message_or_commit_hash)
         """
         if not message or not message.strip():
-            return False, "El mensaje de commit no puede estar vacío"
+            return False, "Commit message cannot be empty"
 
         try:
             result = subprocess.run(
@@ -235,26 +235,26 @@ class GitOperations:
                         commit_hash = hash_result.stdout.strip()[:8]  # Short hash
                         return True, commit_hash
                     else:
-                        return True, "commit creado exitosamente"
+                        return True, "commit created successfully"
                 except:
-                    return True, "commit creado exitosamente"
+                    return True, "commit created successfully"
             else:
                 # Parse common Git commit errors
                 error_msg = result.stderr.strip()
                 if "nothing to commit" in error_msg.lower():
-                    return False, "No hay cambios staged para commit"
+                    return False, "No staged changes for commit"
                 elif "please tell me who you are" in error_msg.lower():
-                    return False, "Configuración de Git incompleta. Ejecuta:\ngit config --global user.email 'tu@email.com'\ngit config --global user.name 'Tu Nombre'"
+                    return False, "Incomplete Git configuration. Run:\ngit config --global user.email 'your@email.com'\ngit config --global user.name 'Your Name'"
                 elif "pathspec" in error_msg.lower():
-                    return False, "Error en los archivos especificados para commit"
+                    return False, "Error in files specified for commit"
                 elif "lock" in error_msg.lower():
-                    return False, "El repositorio está bloqueado. Intenta de nuevo en unos segundos."
+                    return False, "Repository is locked. Try again in a few seconds."
                 else:
-                    return False, f"Error ejecutando commit: {error_msg}"
+                    return False, f"Error executing commit: {error_msg}"
 
         except subprocess.TimeoutExpired:
-            return False, "Timeout ejecutando commit. El proceso tomó demasiado tiempo."
+            return False, "Timeout executing commit. The process took too long."
         except FileNotFoundError:
-            return False, "Git no está disponible"
+            return False, "Git is not available"
         except Exception as e:
-            return False, f"Error inesperado ejecutando commit: {str(e)}"
+            return False, f"Unexpected error executing commit: {str(e)}"

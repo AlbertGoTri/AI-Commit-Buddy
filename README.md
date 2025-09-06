@@ -1,253 +1,253 @@
 # Kiro Commit Buddy
 
-Una herramienta CLI inteligente que automatiza la generación de mensajes de commit utilizando inteligencia artificial. Analiza los cambios en tu repositorio Git y genera mensajes de commit claros y concisos siguiendo la convención de Conventional Commits.
+An intelligent CLI tool that automates commit message generation using artificial intelligence. It analyzes changes in your Git repository and generates clear and concise commit messages following the Conventional Commits convention.
 
-## ✨ Características
+## ✨ Features
 
-- 🤖 **Generación automática de mensajes** usando IA (Groq API)
-- 📝 **Formato Conventional Commits** automático (feat, fix, docs, etc.)
-- 🔄 **Modo fallback** para funcionamiento offline
-- 🎨 **Interfaz colorida** y fácil de usar
-- ⚡ **Integración nativa con Kiro**
-- 🛡️ **Manejo robusto de errores**
+- 🤖 **Automatic message generation** using AI (Groq API)
+- 📝 **Automatic Conventional Commits format** (feat, fix, docs, etc.)
+- 🔄 **Fallback mode** for offline functionality
+- 🎨 **Colorful interface** and easy to use
+- ⚡ **Native Kiro integration**
+- 🛡️ **Robust error handling**
 
-## 🚀 Instalación
+## 🚀 Installation
 
-### Prerrequisitos
+### Prerequisites
 
-- Python 3.7 o superior
-- Git instalado y configurado
+- Python 3.7 or higher
+- Git installed and configured
 - Kiro IDE
-- Cuenta en Groq (para funcionalidad IA)
+- Groq account (for AI functionality)
 
-### Pasos de instalación
+### Installation steps
 
-1. **Clona o descarga el proyecto** en tu workspace de Kiro
-2. **Instala las dependencias**:
+1. **Clone or download the project** to your Kiro workspace
+2. **Install dependencies**:
    ```bash
    pip install -r .kiro/scripts/requirements.txt
    ```
-3. **Configura tu API key de Groq** (ver sección de configuración)
-4. **¡Listo!** El comando ya está registrado en Kiro
+3. **Configure your Groq API key** (see configuration section)
+4. **Ready!** The command is now registered in Kiro
 
-## ⚙️ Configuración
+## ⚙️ Configuration
 
-### Configurar GROQ_API_KEY
+### Configure GROQ_API_KEY
 
-Para usar la funcionalidad de IA, necesitas configurar tu API key de Groq:
+To use AI functionality, you need to configure your Groq API key:
 
-#### Opción 1: Variable de entorno (Recomendado)
+#### Option 1: Environment variable (Recommended)
 
 **Windows (PowerShell):**
 ```powershell
-$env:GROQ_API_KEY = "tu_api_key_aqui"
-# Para hacerlo permanente:
-[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "tu_api_key_aqui", "User")
+$env:GROQ_API_KEY = "your_api_key_here"
+# To make it permanent:
+[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "your_api_key_here", "User")
 ```
 
 **Windows (CMD):**
 ```cmd
-set GROQ_API_KEY=tu_api_key_aqui
-# Para hacerlo permanente, usa el Panel de Control > Sistema > Variables de entorno
+set GROQ_API_KEY=your_api_key_here
+# To make it permanent, use Control Panel > System > Environment Variables
 ```
 
 **macOS/Linux:**
 ```bash
-export GROQ_API_KEY="tu_api_key_aqui"
-# Para hacerlo permanente, añade la línea anterior a tu ~/.bashrc o ~/.zshrc
+export GROQ_API_KEY="your_api_key_here"
+# To make it permanent, add the above line to your ~/.bashrc or ~/.zshrc
 ```
 
-#### Opción 2: Archivo .env (Alternativo)
+#### Option 2: .env file (Alternative)
 
-Crea un archivo `.env` en la raíz de tu proyecto:
+Create a `.env` file in your project root:
 ```
-GROQ_API_KEY=tu_api_key_aqui
+GROQ_API_KEY=your_api_key_here
 ```
 
-### Obtener tu API Key de Groq
+### Get your Groq API Key
 
-1. Ve a [console.groq.com](https://console.groq.com)
-2. Crea una cuenta o inicia sesión
-3. Navega a "API Keys" en el panel
-4. Crea una nueva API key
-5. Copia la key y configúrala como se indica arriba
+1. Go to [console.groq.com](https://console.groq.com)
+2. Create an account or sign in
+3. Navigate to "API Keys" in the panel
+4. Create a new API key
+5. Copy the key and configure it as indicated above
 
-## 📖 Uso
+## 📖 Usage
 
-### Comando básico
+### Basic command
 
 ```bash
 kiro commit --from-diff
 ```
 
-Este comando:
-1. Analiza los cambios staged en tu repositorio
-2. Genera un mensaje de commit usando IA
-3. Te muestra el mensaje propuesto
-4. Te permite confirmarlo, editarlo o cancelar
-5. Ejecuta el commit automáticamente
+This command:
+1. Analyzes staged changes in your repository
+2. Generates a commit message using AI
+3. Shows you the proposed message
+4. Allows you to confirm, edit, or cancel
+5. Executes the commit automatically
 
-### Flujo de trabajo típico
+### Typical workflow
 
 ```bash
-# 1. Haz tus cambios
-git add archivo1.py archivo2.js
+# 1. Make your changes
+git add file1.py file2.js
 
-# 2. Genera y ejecuta el commit
+# 2. Generate and execute the commit
 kiro commit --from-diff
 ```
 
-### Ejemplo de sesión
+### Session example
 
 ```
 $ kiro commit --from-diff
 
-🔍 Analizando cambios staged...
-🤖 Generando mensaje con IA...
+🔍 Analyzing staged changes...
+🤖 Generating message with AI...
 
-📝 Mensaje propuesto:
+📝 Proposed message:
 feat: add user authentication with JWT tokens
 
-¿Usar este mensaje? (y/n/e para editar): y
+Use this message? (y/n/e to edit): y
 
-✅ Commit creado exitosamente: a1b2c3d
+✅ Commit created successfully: a1b2c3d
 ```
 
-## 🎯 Tipos de commit soportados
+## 🎯 Supported commit types
 
-La herramienta genera automáticamente el prefijo correcto según tus cambios:
+The tool automatically generates the correct prefix based on your changes:
 
-- `feat:` - Nuevas funcionalidades
-- `fix:` - Corrección de bugs
-- `docs:` - Cambios en documentación
-- `refactor:` - Refactorización de código
-- `test:` - Cambios en pruebas
-- `chore:` - Tareas de mantenimiento
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation changes
+- `refactor:` - Code refactoring
+- `test:` - Test changes
+- `chore:` - Maintenance tasks
 
-## 🔧 Solución de problemas
+## 🔧 Troubleshooting
 
-### Error: "No estás en un repositorio Git"
+### Error: "You are not in a Git repository"
 
-**Problema:** El comando se ejecuta fuera de un repositorio Git.
+**Problem:** The command is executed outside of a Git repository.
 
-**Solución:**
+**Solution:**
 ```bash
-cd tu-proyecto-git
+cd your-git-project
 kiro commit --from-diff
 ```
 
-### Error: "No hay cambios staged para commit"
+### Error: "No staged changes for commit"
 
-**Problema:** No tienes archivos en el área de staging.
+**Problem:** You don't have files in the staging area.
 
-**Solución:**
+**Solution:**
 ```bash
-git add archivo1.py archivo2.js
+git add file1.py file2.js
 kiro commit --from-diff
 ```
 
-### Error: "GROQ_API_KEY no configurada"
+### Error: "GROQ_API_KEY not configured"
 
-**Problema:** La API key no está configurada.
+**Problem:** The API key is not configured.
 
-**Solución:**
-1. Sigue los pasos de configuración de GROQ_API_KEY
-2. Reinicia tu terminal/IDE
-3. Verifica con: `echo $GROQ_API_KEY` (Linux/Mac) o `echo $env:GROQ_API_KEY` (Windows PowerShell)
+**Solution:**
+1. Follow the GROQ_API_KEY configuration steps
+2. Restart your terminal/IDE
+3. Verify with: `echo $GROQ_API_KEY` (Linux/Mac) or `echo $env:GROQ_API_KEY` (Windows PowerShell)
 
-### La IA no está disponible
+### AI is not available
 
-**Problema:** API de Groq no responde o hay problemas de conexión.
+**Problem:** Groq API doesn't respond or there are connection issues.
 
-**Comportamiento:** La herramienta automáticamente usa un mensaje de fallback:
+**Behavior:** The tool automatically uses a fallback message:
 ```
-⚠️  API no disponible, generando mensaje básico...
-📝 Mensaje propuesto: chore: update archivo1.py, archivo2.js
-```
-
-### Mensaje generado no es apropiado
-
-**Solución:** Usa la opción de edición:
-```
-¿Usar este mensaje? (y/n/e para editar): e
-Edita el mensaje: feat: implement user login system
+⚠️  API not available, generating basic message...
+📝 Proposed message: chore: update file1.py, file2.js
 ```
 
-### Problemas de permisos en Windows
+### Generated message is not appropriate
 
-**Problema:** Error al ejecutar Python scripts.
+**Solution:** Use the edit option:
+```
+Use this message? (y/n/e to edit): e
+Edit message: feat: implement user login system
+```
 
-**Solución:**
+### Permission issues on Windows
+
+**Problem:** Error executing Python scripts.
+
+**Solution:**
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### Dependencias no instaladas
+### Dependencies not installed
 
-**Problema:** Error de importación de módulos.
+**Problem:** Module import error.
 
-**Solución:**
+**Solution:**
 ```bash
 pip install -r .kiro/scripts/requirements.txt
 ```
 
 ## 🧪 Testing
 
-Para ejecutar las pruebas:
+To run the tests:
 
 ```bash
-# Ejecutar todas las pruebas
+# Run all tests
 python -m pytest .kiro/scripts/test_*.py -v
 
-# Ejecutar pruebas específicas
+# Run specific tests
 python -m pytest .kiro/scripts/test_commit_buddy_integration.py -v
 ```
 
-## 📁 Estructura del proyecto
+## 📁 Project structure
 
 ```
 .kiro/
 ├── hooks/
-│   └── commit.yml              # Configuración del comando Kiro
+│   └── commit.yml              # Kiro command configuration
 ├── scripts/
-│   ├── commit_buddy.py         # Punto de entrada principal
-│   ├── config.py              # Configuración y variables de entorno
-│   ├── git_operations.py      # Operaciones con Git
-│   ├── groq_client.py         # Cliente para API de Groq
-│   ├── message_generator.py   # Lógica de generación de mensajes
-│   ├── user_interface.py      # Interfaz de usuario
-│   ├── requirements.txt       # Dependencias Python
-│   └── test_*.py             # Archivos de prueba
+│   ├── commit_buddy.py         # Main entry point
+│   ├── config.py              # Configuration and environment variables
+│   ├── git_operations.py      # Git operations
+│   ├── groq_client.py         # Groq API client
+│   ├── message_generator.py   # Message generation logic
+│   ├── user_interface.py      # User interface
+│   ├── requirements.txt       # Python dependencies
+│   └── test_*.py             # Test files
 └── specs/
-    └── kiro-commit-buddy/     # Documentación del proyecto
+    └── kiro-commit-buddy/     # Project documentation
 ```
 
-## 🤝 Contribuir
+## 🤝 Contributing
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'feat: add nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/new-functionality`)
+3. Commit your changes (`git commit -am 'feat: add new functionality'`)
+4. Push to the branch (`git push origin feature/new-functionality`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+This project is under the MIT License. See the `LICENSE` file for more details.
 
-## 🆘 Soporte
+## 🆘 Support
 
-Si encuentras problemas o tienes preguntas:
+If you encounter problems or have questions:
 
-1. Revisa la sección de **Solución de problemas**
-2. Busca en los issues existentes
-3. Crea un nuevo issue con detalles del problema
+1. Review the **Troubleshooting** section
+2. Search existing issues
+3. Create a new issue with problem details
 
 ## 🔄 Changelog
 
 ### v1.0.0
-- ✅ Generación automática de mensajes con IA
-- ✅ Soporte para Conventional Commits
-- ✅ Modo fallback offline
-- ✅ Integración completa con Kiro
-- ✅ Interfaz de usuario interactiva
-- ✅ Manejo robusto de errores
+- ✅ Automatic message generation with AI
+- ✅ Conventional Commits support
+- ✅ Offline fallback mode
+- ✅ Complete Kiro integration
+- ✅ Interactive user interface
+- ✅ Robust error handling

@@ -93,9 +93,9 @@ class CommitBuddy:
             # Step 2: Check for staged changes with detailed feedback
             has_changes, status_msg, changed_files = self.git_ops.check_staged_changes()
             if not has_changes:
-                if "sin stage" in status_msg:
+                if "not staged" in status_msg:
                     self.ui.show_warning(status_msg)
-                    self.ui.show_info("Sugerencia: Usa 'git add <archivo>' para stagear cambios específicos o 'git add .' para stagear todos los cambios.")
+                    self.ui.show_info("Suggestion: Use 'git add <file>' to stage specific changes or 'git add .' to stage all changes.")
                 else:
                     self.ui.show_info(status_msg)
                 return 0
@@ -106,7 +106,7 @@ class CommitBuddy:
             try:
                 staged_diff = self.git_ops.get_staged_diff()
             except GitOperationError as e:
-                self.ui.show_error(f"Error obteniendo diff: {str(e)}")
+                self.ui.show_error(f"Error getting diff: {str(e)}")
                 return 1
 
             # Step 4: Show diff summary to user
@@ -118,12 +118,12 @@ class CommitBuddy:
             try:
                 commit_message = message_generator.generate_message(staged_diff, changed_files)
             except GroqAPIError as e:
-                self.ui.show_warning(f"Error de API: {str(e)}")
-                self.ui.show_info("Usando generación de mensaje local...")
+                self.ui.show_warning(f"API error: {str(e)}")
+                self.ui.show_info("Using local message generation...")
                 commit_message = message_generator.generate_fallback_message(changed_files)
             except Exception as e:
-                self.ui.show_warning(f"Error generando mensaje: {str(e)}")
-                self.ui.show_info("Usando generación de mensaje de respaldo...")
+                self.ui.show_warning(f"Error generating message: {str(e)}")
+                self.ui.show_info("Using fallback message generation...")
                 commit_message = message_generator.generate_fallback_message(changed_files)
 
             # Step 6: Present message to user and handle response
@@ -135,52 +135,52 @@ class CommitBuddy:
                     break
                 elif user_choice == 'n':
                     # User cancelled
-                    self.ui.show_info("Commit cancelado")
+                    self.ui.show_info("Commit cancelled")
                     return 0
                 elif user_choice == 'e':
                     # User wants to edit
                     edited_message = self.ui.allow_message_editing(commit_message)
                     if edited_message is None:
                         # User cancelled editing
-                        self.ui.show_info("Commit cancelado")
+                        self.ui.show_info("Commit cancelled")
                         return 0
                     commit_message = edited_message
                     # Continue loop to show the edited message for confirmation
                 else:
                     # This shouldn't happen due to UI validation, but handle it
-                    self.ui.show_error("Respuesta inválida")
+                    self.ui.show_error("Invalid response")
                     continue
 
             # Step 7: Execute the commit with detailed error handling
-            self.ui.show_info("Ejecutando commit...")
+            self.ui.show_info("Executing commit...")
 
             success, result_msg = self.git_ops.commit_with_message(commit_message)
             if success:
-                self.ui.show_success(f"Commit {result_msg} creado: {commit_message}")
+                self.ui.show_success(f"Commit {result_msg} created: {commit_message}")
                 return 0
             else:
                 self.ui.show_error(result_msg)
                 # Provide additional guidance based on the error
-                if "configuración" in result_msg.lower():
-                    self.ui.show_info("Después de configurar Git, intenta el commit nuevamente.")
+                if "configuration" in result_msg.lower():
+                    self.ui.show_info("After configuring Git, try the commit again.")
                 elif "staged" in result_msg.lower():
-                    self.ui.show_info("Verifica que tienes cambios staged con 'git status'.")
+                    self.ui.show_info("Verify that you have staged changes with 'git status'.")
                 return 1
 
         except KeyboardInterrupt:
             print()  # New line after Ctrl+C
-            self.ui.show_info("Operación cancelada por el usuario")
+            self.ui.show_info("Operation cancelled by user")
             return 0
         except GitOperationError as e:
-            self.ui.show_error(f"Error de Git: {str(e)}")
+            self.ui.show_error(f"Git error: {str(e)}")
             return 1
         except GroqAPIError as e:
-            self.ui.show_error(f"Error de API: {str(e)}")
-            self.ui.show_info("Intenta nuevamente o verifica tu configuración de GROQ_API_KEY.")
+            self.ui.show_error(f"API error: {str(e)}")
+            self.ui.show_info("Try again or verify your GROQ_API_KEY configuration.")
             return 1
         except Exception as e:
-            self.ui.show_error(f"Error inesperado: {str(e)}")
-            self.ui.show_info("Si el problema persiste, verifica tu configuración de Git y la conectividad de red.")
+            self.ui.show_error(f"Unexpected error: {str(e)}")
+            self.ui.show_info("If the problem persists, verify your Git configuration and network connectivity.")
             return 1
 
 if __name__ == "__main__":

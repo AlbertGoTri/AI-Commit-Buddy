@@ -1,274 +1,274 @@
-# Guía de Instalación - Kiro Commit Buddy
+# Installation Guide - Kiro Commit Buddy
 
-Esta guía te llevará paso a paso por el proceso de instalación y configuración de Kiro Commit Buddy.
+This guide will take you step by step through the installation and configuration process of Kiro Commit Buddy.
 
-## ❓ Preguntas Frecuentes sobre Instalación
+## ❓ Frequently Asked Questions about Installation
 
-### ¿Necesito crear un repositorio en GitHub?
-**No es necesario.** El código ya funciona perfectamente en tu máquina local. Si quieres compartirlo o hacer backup:
-- Puedes crear tu propio repositorio: `https://github.com/TU_USUARIO/kiro-commit-buddy.git`
-- O simplemente usarlo localmente
+### Do I need to create a GitHub repository?
+**It's not necessary.** The code already works perfectly on your local machine. If you want to share it or make backups:
+- You can create your own repository: `https://github.com/YOUR_USERNAME/kiro-commit-buddy.git`
+- Or simply use it locally
 
-### ¿Qué es un workspace de Kiro?
-Un **workspace de Kiro** es cualquier directorio que contenga una carpeta `.kiro/`. Es como `.git/` para Git - simplemente marca que ese directorio usa Kiro.
+### What is a Kiro workspace?
+A **Kiro workspace** is any directory that contains a `.kiro/` folder. It's like `.git/` for Git - it simply marks that the directory uses Kiro.
 
-### ¿Solo funciona en proyectos Kiro?
-**¡No!** Funciona en **cualquier repositorio Git**, tenga o no Kiro:
-- **Con Kiro**: `kiro commit --from-diff` (comando nativo)
-- **Sin Kiro**: `python .kiro/scripts/commit_buddy.py --from-diff` (funciona igual)
+### Does it only work in Kiro projects?
+**No!** It works in **any Git repository**, whether it has Kiro or not:
+- **With Kiro**: `kiro commit --from-diff` (native command)
+- **Without Kiro**: `python .kiro/scripts/commit_buddy.py --from-diff` (works the same)
 
-### ¿Cómo usar en otros proyectos?
-Simplemente copia la carpeta `.kiro/` a cualquier otro repositorio Git y ya funcionará allí también.
+### How to use in other projects?
+Simply copy the `.kiro/` folder to any other Git repository and it will work there too.
 
-## 📋 Prerrequisitos
+## 📋 Prerequisites
 
-Antes de comenzar, asegúrate de tener instalado:
+Before starting, make sure you have installed:
 
-### Requisitos obligatorios
-- **Python 3.7 o superior** ([Descargar Python](https://www.python.org/downloads/))
-- **Git** ([Descargar Git](https://git-scm.com/downloads))
-- **Kiro IDE** (debe estar instalado y funcionando)
+### Required requirements
+- **Python 3.7 or higher** ([Download Python](https://www.python.org/downloads/))
+- **Git** ([Download Git](https://git-scm.com/downloads))
+- **Kiro IDE** (must be installed and working)
 
-### Requisitos opcionales
-- **Cuenta en Groq** para funcionalidad IA ([Registrarse en Groq](https://console.groq.com))
+### Optional requirements
+- **Groq account** for AI functionality ([Sign up for Groq](https://console.groq.com))
 
-## 🚀 Instalación paso a paso
+## 🚀 Step-by-step installation
 
-### Paso 1: Verificar prerrequisitos
+### Step 1: Verify prerequisites
 
-Abre tu terminal y verifica que tienes todo instalado:
+Open your terminal and verify that you have everything installed:
 
 ```bash
-# Verificar Python
+# Verify Python
 python --version
-# Debe mostrar: Python 3.7.x o superior
+# Should show: Python 3.7.x or higher
 
-# Verificar Git
+# Verify Git
 git --version
-# Debe mostrar: git version x.x.x
+# Should show: git version x.x.x
 
-# Verificar pip
+# Verify pip
 pip --version
-# Debe mostrar: pip x.x.x
+# Should show: pip x.x.x
 ```
 
-### Paso 2: Preparar el proyecto
+### Step 2: Prepare the project
 
-1. **Navega a tu workspace de Kiro:**
+1. **Navigate to your Kiro workspace:**
    ```bash
-   cd /ruta/a/tu/workspace
+   cd /path/to/your/workspace
    ```
 
-2. **Verifica que estás en un repositorio Git:**
+2. **Verify that you are in a Git repository:**
    ```bash
    git status
    ```
    
-   Si no es un repositorio Git, inicialízalo:
+   If it's not a Git repository, initialize it:
    ```bash
    git init
    ```
 
-### Paso 3: Instalar Kiro Commit Buddy
+### Step 3: Install Kiro Commit Buddy
 
-#### Opción A: Ya tienes el código
+#### Option A: You already have the code
 
-**¡Si ya tienes estos archivos en tu proyecto, no necesitas hacer nada más!** 
-El Kiro Commit Buddy ya está instalado y listo para usar.
+**If you already have these files in your project, you don't need to do anything else!** 
+Kiro Commit Buddy is already installed and ready to use.
 
 ```bash
-# Verificar que tienes los archivos
+# Verify that you have the files
 ls .kiro/hooks/commit.yml
 ls .kiro/scripts/commit_buddy.py
 
-# Instalar dependencias si no lo has hecho
+# Install dependencies if you haven't done so
 pip install -r .kiro/scripts/requirements.txt
 ```
 
-#### Opción B: Clonar desde repositorio
+#### Option B: Clone from repository
 
-Si quieres obtener el código desde un repositorio:
+If you want to get the code from a repository:
 
 ```bash
-# Si el repositorio existe (puedes crear el tuyo propio)
-git clone https://github.com/TU_USUARIO/kiro-commit-buddy.git
+# If the repository exists (you can create your own)
+git clone https://github.com/YOUR_USERNAME/kiro-commit-buddy.git
 cd kiro-commit-buddy
 
-# Instalar usando setup.py
+# Install using setup.py
 pip install -e .
 ```
 
-#### Opción C: Instalación manual
+#### Option C: Manual installation
 
-Si tienes los archivos del proyecto:
+If you have the project files:
 
-1. **Crear la estructura de directorios:**
+1. **Create the directory structure:**
    ```bash
    mkdir -p .kiro/hooks
    mkdir -p .kiro/scripts
    ```
 
-2. **Copiar los archivos del proyecto** a las ubicaciones correctas:
-   - Archivos Python → `.kiro/scripts/`
-   - Archivo de hook → `.kiro/hooks/commit.yml`
+2. **Copy the project files** to the correct locations:
+   - Python files → `.kiro/scripts/`
+   - Hook file → `.kiro/hooks/commit.yml`
 
-3. **Instalar dependencias:**
+3. **Install dependencies:**
    ```bash
    pip install -r .kiro/scripts/requirements.txt
    ```
 
-### Paso 4: Configurar Groq API
+### Step 4: Configure Groq API
 
-#### 4.1 Obtener API Key
+#### 4.1 Get API Key
 
-1. Ve a [console.groq.com](https://console.groq.com)
-2. Crea una cuenta o inicia sesión
-3. Navega a "API Keys" en el panel lateral
-4. Haz clic en "Create API Key"
-5. Dale un nombre a tu key (ej: "Kiro Commit Buddy")
-6. Copia la API key generada (empieza con `gsk_`)
+1. Go to [console.groq.com](https://console.groq.com)
+2. Create an account or sign in
+3. Navigate to "API Keys" in the side panel
+4. Click on "Create API Key"
+5. Give your key a name (e.g.: "Kiro Commit Buddy")
+6. Copy the generated API key (starts with `gsk_`)
 
-#### 4.2 Configurar la API Key
+#### 4.2 Configure the API Key
 
 **Windows (PowerShell):**
 ```powershell
-# Configuración temporal (solo para esta sesión)
-$env:GROQ_API_KEY = "gsk_tu_api_key_aqui"
+# Temporary configuration (only for this session)
+$env:GROQ_API_KEY = "gsk_your_api_key_here"
 
-# Configuración permanente
-[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "gsk_tu_api_key_aqui", "User")
+# Permanent configuration
+[Environment]::SetEnvironmentVariable("GROQ_API_KEY", "gsk_your_api_key_here", "User")
 
-# Verificar configuración
+# Verify configuration
 echo $env:GROQ_API_KEY
 ```
 
 **Windows (CMD):**
 ```cmd
-# Configuración temporal
-set GROQ_API_KEY=gsk_tu_api_key_aqui
+# Temporary configuration
+set GROQ_API_KEY=gsk_your_api_key_here
 
-# Para configuración permanente:
-# 1. Panel de Control > Sistema > Configuración avanzada del sistema
-# 2. Variables de entorno > Variables de usuario > Nueva
-# 3. Nombre: GROQ_API_KEY
-# 4. Valor: gsk_tu_api_key_aqui
+# For permanent configuration:
+# 1. Control Panel > System > Advanced system settings
+# 2. Environment Variables > User variables > New
+# 3. Name: GROQ_API_KEY
+# 4. Value: gsk_your_api_key_here
 ```
 
 **macOS/Linux:**
 ```bash
-# Configuración temporal
-export GROQ_API_KEY="gsk_tu_api_key_aqui"
+# Temporary configuration
+export GROQ_API_KEY="gsk_your_api_key_here"
 
-# Configuración permanente
-echo 'export GROQ_API_KEY="gsk_tu_api_key_aqui"' >> ~/.bashrc
+# Permanent configuration
+echo 'export GROQ_API_KEY="gsk_your_api_key_here"' >> ~/.bashrc
 source ~/.bashrc
 
-# Para zsh users
-echo 'export GROQ_API_KEY="gsk_tu_api_key_aqui"' >> ~/.zshrc
+# For zsh users
+echo 'export GROQ_API_KEY="gsk_your_api_key_here"' >> ~/.zshrc
 source ~/.zshrc
 
-# Verificar configuración
+# Verify configuration
 echo $GROQ_API_KEY
 ```
 
-### Paso 5: Verificar la instalación
+### Step 5: Verify the installation
 
-1. **Verificar que los archivos están en su lugar:**
+1. **Verify that the files are in place:**
    ```bash
    ls .kiro/hooks/commit.yml
    ls .kiro/scripts/commit_buddy.py
    ls .kiro/scripts/requirements.txt
    ```
 
-2. **Probar el script directamente:**
+2. **Test the script directly:**
    ```bash
    python .kiro/scripts/commit_buddy.py --help
    ```
    
-   Deberías ver la ayuda del comando.
+   You should see the command help.
 
-3. **Probar con Kiro:**
+3. **Test with Kiro:**
    ```bash
-   # Hacer algunos cambios y añadirlos al staging
+   # Make some changes and add them to staging
    echo "test" > test.txt
    git add test.txt
    
-   # Probar el comando
+   # Test the command
    kiro commit --from-diff
    ```
 
-### Paso 6: Configuración avanzada (Opcional)
+### Step 6: Advanced configuration (Optional)
 
-#### Personalizar configuración
+#### Customize configuration
 
-Puedes crear un archivo `.env` en la raíz de tu proyecto para configuraciones adicionales:
+You can create a `.env` file in your project root for additional configurations:
 
 ```bash
 # .env
-GROQ_API_KEY=gsk_tu_api_key_aqui
+GROQ_API_KEY=gsk_your_api_key_here
 GROQ_MODEL=llama3-70b-8192
 MAX_DIFF_SIZE=8000
 TIMEOUT=10
 ```
 
-#### Configurar para múltiples proyectos
+#### Configure for multiple projects
 
-Si quieres usar Kiro Commit Buddy en múltiples proyectos:
+If you want to use Kiro Commit Buddy in multiple projects:
 
-1. **Instala globalmente:**
+1. **Install globally:**
    ```bash
    pip install -e . --user
    ```
 
-2. **Copia la configuración a cada proyecto:**
+2. **Copy the configuration to each project:**
    ```bash
-   cp .kiro/hooks/commit.yml /otro/proyecto/.kiro/hooks/
-   cp -r .kiro/scripts /otro/proyecto/.kiro/
+   cp .kiro/hooks/commit.yml /other/project/.kiro/hooks/
+   cp -r .kiro/scripts /other/project/.kiro/
    ```
 
-## 🔧 Configuraciones específicas por sistema
+## 🔧 System-specific configurations
 
-### Windows con WSL
+### Windows with WSL
 
-Si usas Windows Subsystem for Linux:
+If you use Windows Subsystem for Linux:
 
 ```bash
-# En WSL
-export GROQ_API_KEY="gsk_tu_api_key_aqui"
+# In WSL
+export GROQ_API_KEY="gsk_your_api_key_here"
 
-# Para que persista entre sesiones
-echo 'export GROQ_API_KEY="gsk_tu_api_key_aqui"' >> ~/.bashrc
+# To persist between sessions
+echo 'export GROQ_API_KEY="gsk_your_api_key_here"' >> ~/.bashrc
 ```
 
-### macOS con Homebrew
+### macOS with Homebrew
 
-Si instalaste Python con Homebrew:
+If you installed Python with Homebrew:
 
 ```bash
-# Usar python3 explícitamente
+# Use python3 explicitly
 python3 -m pip install -r .kiro/scripts/requirements.txt
 
-# Verificar que usa la versión correcta
+# Verify it uses the correct version
 which python3
 python3 --version
 ```
 
-### Linux con múltiples versiones de Python
+### Linux with multiple Python versions
 
 ```bash
-# Usar una versión específica
+# Use a specific version
 python3.9 -m pip install -r .kiro/scripts/requirements.txt
 
-# Crear un alias si es necesario
+# Create an alias if necessary
 echo 'alias python=python3.9' >> ~/.bashrc
 ```
 
-## 🧪 Verificación completa
+## 🧪 Complete verification
 
-Ejecuta este script de verificación para asegurarte de que todo está configurado correctamente:
+Run this verification script to make sure everything is configured correctly:
 
 ```bash
-# Crear script de verificación
+# Create verification script
 cat > verify_installation.py << 'EOF'
 #!/usr/bin/env python3
 import os
@@ -277,20 +277,20 @@ import subprocess
 from pathlib import Path
 
 def verify_installation():
-    print("🔍 Verificando instalación de Kiro Commit Buddy...\n")
+    print("🔍 Verifying Kiro Commit Buddy installation...\n")
     
-    # Verificar Python
+    # Verify Python
     print(f"✅ Python: {sys.version}")
     
-    # Verificar Git
+    # Verify Git
     try:
         result = subprocess.run(['git', '--version'], capture_output=True, text=True)
         print(f"✅ Git: {result.stdout.strip()}")
     except:
-        print("❌ Git: No encontrado")
+        print("❌ Git: Not found")
         return False
     
-    # Verificar archivos
+    # Verify files
     files = [
         '.kiro/hooks/commit.yml',
         '.kiro/scripts/commit_buddy.py',
@@ -299,46 +299,46 @@ def verify_installation():
     
     for file in files:
         if Path(file).exists():
-            print(f"✅ {file}: Existe")
+            print(f"✅ {file}: Exists")
         else:
-            print(f"❌ {file}: No encontrado")
+            print(f"❌ {file}: Not found")
             return False
     
-    # Verificar dependencias
+    # Verify dependencies
     try:
         import requests
         import colorama
-        print("✅ Dependencias: Instaladas")
+        print("✅ Dependencies: Installed")
     except ImportError as e:
-        print(f"❌ Dependencias: {e}")
+        print(f"❌ Dependencies: {e}")
         return False
     
-    # Verificar API key
+    # Verify API key
     api_key = os.getenv('GROQ_API_KEY')
     if api_key and api_key.startswith('gsk_'):
-        print("✅ GROQ_API_KEY: Configurada")
+        print("✅ GROQ_API_KEY: Configured")
     else:
-        print("⚠️  GROQ_API_KEY: No configurada (funcionalidad IA limitada)")
+        print("⚠️  GROQ_API_KEY: Not configured (limited AI functionality)")
     
-    # Verificar que el script funciona
+    # Verify that the script works
     try:
         result = subprocess.run([
             sys.executable, '.kiro/scripts/commit_buddy.py', '--help'
         ], capture_output=True, text=True)
         if result.returncode == 0:
-            print("✅ Script: Funcional")
+            print("✅ Script: Functional")
         else:
-            print("❌ Script: Error al ejecutar")
+            print("❌ Script: Error executing")
             return False
     except:
-        print("❌ Script: No se puede ejecutar")
+        print("❌ Script: Cannot execute")
         return False
     
-    print("\n🎉 ¡Instalación completada exitosamente!")
-    print("\nPróximos pasos:")
-    print("1. Haz algunos cambios en tu código")
-    print("2. Añádelos al staging: git add .")
-    print("3. Ejecuta: kiro commit --from-diff")
+    print("\n🎉 Installation completed successfully!")
+    print("\nNext steps:")
+    print("1. Make some changes to your code")
+    print("2. Add them to staging: git add .")
+    print("3. Run: kiro commit --from-diff")
     
     return True
 
@@ -346,13 +346,13 @@ if __name__ == "__main__":
     verify_installation()
 EOF
 
-# Ejecutar verificación
+# Run verification
 python verify_installation.py
 ```
 
-## 🆘 Solución de problemas de instalación
+## 🆘 Installation troubleshooting
 
-### Error: "pip no encontrado"
+### Error: "pip not found"
 
 ```bash
 # Windows
@@ -370,35 +370,35 @@ sudo apt install python3-pip
 ### Error: "Permission denied"
 
 ```bash
-# Usar --user para instalar solo para tu usuario
+# Use --user to install only for your user
 pip install --user -r .kiro/scripts/requirements.txt
 
-# O usar un entorno virtual
+# Or use a virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# o
+# or
 venv\Scripts\activate     # Windows
 pip install -r .kiro/scripts/requirements.txt
 ```
 
 ### Error: "Command not found: kiro"
 
-1. Verifica que Kiro IDE está instalado y funcionando
-2. Reinicia Kiro IDE
-3. Verifica que el archivo `.kiro/hooks/commit.yml` existe
-4. Prueba ejecutar directamente: `python .kiro/scripts/commit_buddy.py --from-diff`
+1. Verify that Kiro IDE is installed and working
+2. Restart Kiro IDE
+3. Verify that the `.kiro/hooks/commit.yml` file exists
+4. Try running directly: `python .kiro/scripts/commit_buddy.py --from-diff`
 
-## 📞 Obtener ayuda
+## 📞 Get help
 
-Si encuentras problemas durante la instalación:
+If you encounter problems during installation:
 
-1. Revisa la [Guía de Solución de Problemas](TROUBLESHOOTING.md)
-2. Ejecuta el script de verificación de arriba
-3. Busca en los issues del repositorio
-4. Crea un nuevo issue con:
-   - Tu sistema operativo
-   - Versión de Python
-   - Mensaje de error completo
-   - Pasos que seguiste
+1. Review the [Troubleshooting Guide](TROUBLESHOOTING.md)
+2. Run the verification script above
+3. Search in the repository issues
+4. Create a new issue with:
+   - Your operating system
+   - Python version
+   - Complete error message
+   - Steps you followed
 
-¡Bienvenido a Kiro Commit Buddy! 🎉
+Welcome to Kiro Commit Buddy! 🎉

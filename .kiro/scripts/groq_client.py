@@ -31,17 +31,17 @@ class GroqClient:
             self.logger.error("GROQ_API_KEY not configured", "GROQ")
             raise GroqAPIError(
                 "GROQ_API_KEY environment variable is not configured.\n"
-                "Para configurarla:\n"
-                "  Windows: set GROQ_API_KEY=tu_api_key\n"
-                "  Linux/Mac: export GROQ_API_KEY=tu_api_key\n"
-                "Obtén tu API key en: https://console.groq.com/keys"
+                "To configure it:\n"
+                "  Windows: set GROQ_API_KEY=your_api_key\n"
+                "  Linux/Mac: export GROQ_API_KEY=your_api_key\n"
+                "Get your API key at: https://console.groq.com/keys"
             )
 
         # Validate API key format
         is_valid, error_msg = self.config.validate_api_key_format()
         if not is_valid:
             self.logger.error(f"API key format validation failed: {error_msg}", "GROQ")
-            raise GroqAPIError(f"Formato de API key inválido: {error_msg}")
+            raise GroqAPIError(f"Invalid API key format: {error_msg}")
         
         self.logger.debug("API key validation successful", "GROQ")
 
@@ -237,7 +237,7 @@ class GroqClient:
             # If no conventional commit found, use the first non-empty line
             for line in lines:
                 line = line.strip()
-                if line and not line.lower().startswith(('análisis:', 'justificación:', 'basándome', 'el mensaje')):
+                if line and not line.lower().startswith(('analysis:', 'justification:', 'based on', 'the message')):
                     # Remove quotes and backticks
                     if (line.startswith('"') and line.endswith('"')) or \
                        (line.startswith("'") and line.endswith("'")):

@@ -1,291 +1,291 @@
-# Ejemplos de Uso - Kiro Commit Buddy
+# Usage Examples - Kiro Commit Buddy
 
-Esta guía contiene ejemplos prácticos de cómo usar Kiro Commit Buddy en diferentes escenarios.
+This guide contains practical examples of how to use Kiro Commit Buddy in different scenarios.
 
-## 🚀 Uso básico
+## 🚀 Basic usage
 
-### Ejemplo 1: Primer commit
+### Example 1: First commit
 
 ```bash
-# 1. Crear un nuevo archivo
+# 1. Create a new file
 echo "print('Hello, World!')" > hello.py
 
-# 2. Añadir al staging
+# 2. Add to staging
 git add hello.py
 
-# 3. Generar commit con IA
+# 3. Generate commit with AI
 kiro commit --from-diff
 ```
 
-**Salida esperada:**
+**Expected output:**
 ```
-🔍 Analizando cambios staged...
-🤖 Generando mensaje con IA...
+🔍 Analyzing staged changes...
+🤖 Generating message with AI...
 
-📝 Mensaje propuesto:
+📝 Proposed message:
 feat: add hello world script
 
-¿Usar este mensaje? (y/n/e para editar): y
+Use this message? (y/n/e to edit): y
 
-✅ Commit creado exitosamente: a1b2c3d
+✅ Commit created successfully: a1b2c3d
 ```
 
-### Ejemplo 2: Corrección de bug
+### Example 2: Bug fix
 
 ```bash
-# 1. Corregir un bug en el código
-# Cambiar: result = x / y
-# Por: result = x / y if y != 0 else 0
+# 1. Fix a bug in the code
+# Change: result = x / y
+# To: result = x / y if y != 0 else 0
 
-# 2. Añadir cambios
+# 2. Add changes
 git add calculator.py
 
-# 3. Generar commit
+# 3. Generate commit
 kiro commit --from-diff
 ```
 
-**Salida esperada:**
+**Expected output:**
 ```
-📝 Mensaje propuesto:
+📝 Proposed message:
 fix: prevent division by zero in calculator
 
-¿Usar este mensaje? (y/n/e para editar): y
+Use this message? (y/n/e to edit): y
 ```
 
-## 📝 Tipos de commit automáticos
+## 📝 Automatic commit types
 
-### feat: Nuevas funcionalidades
+### feat: New features
 
 ```bash
-# Añadir nueva función de autenticación
+# Add new authentication function
 git add auth.py login.html
 kiro commit --from-diff
-# Resultado: "feat: add user authentication system"
+# Result: "feat: add user authentication system"
 
-# Añadir API endpoint
+# Add API endpoint
 git add api/users.py
 kiro commit --from-diff
-# Resultado: "feat: add users API endpoint"
+# Result: "feat: add users API endpoint"
 ```
 
-### fix: Correcciones
+### fix: Fixes
 
 ```bash
-# Corregir error de validación
+# Fix validation error
 git add validation.py
 kiro commit --from-diff
-# Resultado: "fix: correct email validation regex"
+# Result: "fix: correct email validation regex"
 
-# Arreglar problema de memoria
+# Fix memory problem
 git add memory_manager.py
 kiro commit --from-diff
-# Resultado: "fix: resolve memory leak in cache"
+# Result: "fix: resolve memory leak in cache"
 ```
 
-### docs: Documentación
+### docs: Documentation
 
 ```bash
-# Actualizar README
+# Update README
 git add README.md
 kiro commit --from-diff
-# Resultado: "docs: update installation instructions"
+# Result: "docs: update installation instructions"
 
-# Añadir comentarios al código
+# Add code comments
 git add complex_algorithm.py
 kiro commit --from-diff
-# Resultado: "docs: add comments to sorting algorithm"
+# Result: "docs: add comments to sorting algorithm"
 ```
 
-### refactor: Refactorización
+### refactor: Refactoring
 
 ```bash
-# Reorganizar código
+# Reorganize code
 git add utils.py helpers.py
 kiro commit --from-diff
-# Resultado: "refactor: extract utility functions to separate module"
+# Result: "refactor: extract utility functions to separate module"
 
-# Mejorar estructura de clases
+# Improve class structure
 git add models/user.py
 kiro commit --from-diff
-# Resultado: "refactor: simplify user model structure"
+# Result: "refactor: simplify user model structure"
 ```
 
-### test: Pruebas
+### test: Tests
 
 ```bash
-# Añadir tests unitarios
+# Add unit tests
 git add test_calculator.py
 kiro commit --from-diff
-# Resultado: "test: add unit tests for calculator functions"
+# Result: "test: add unit tests for calculator functions"
 
-# Actualizar tests existentes
+# Update existing tests
 git add test_auth.py
 kiro commit --from-diff
-# Resultado: "test: update authentication test cases"
+# Result: "test: update authentication test cases"
 ```
 
-### chore: Tareas de mantenimiento
+### chore: Maintenance tasks
 
 ```bash
-# Actualizar dependencias
+# Update dependencies
 git add requirements.txt
 kiro commit --from-diff
-# Resultado: "chore: update project dependencies"
+# Result: "chore: update project dependencies"
 
-# Configuración de build
+# Build configuration
 git add .github/workflows/ci.yml
 kiro commit --from-diff
-# Resultado: "chore: configure CI/CD pipeline"
+# Result: "chore: configure CI/CD pipeline"
 ```
 
-## 🎛️ Opciones de interacción
+## 🎛️ Interaction options
 
-### Confirmar mensaje (y)
+### Confirm message (y)
 
 ```bash
 kiro commit --from-diff
-# Mensaje propuesto: "feat: add user dashboard"
-# ¿Usar este mensaje? (y/n/e para editar): y
-# ✅ Commit creado exitosamente
+# Proposed message: "feat: add user dashboard"
+# Use this message? (y/n/e to edit): y
+# ✅ Commit created successfully
 ```
 
-### Rechazar mensaje (n)
+### Reject message (n)
 
 ```bash
 kiro commit --from-diff
-# Mensaje propuesto: "chore: update files"
-# ¿Usar este mensaje? (y/n/e para editar): n
-# ❌ Commit cancelado
+# Proposed message: "chore: update files"
+# Use this message? (y/n/e to edit): n
+# ❌ Commit cancelled
 ```
 
-### Editar mensaje (e)
+### Edit message (e)
 
 ```bash
 kiro commit --from-diff
-# Mensaje propuesto: "feat: add login"
-# ¿Usar este mensaje? (y/n/e para editar): e
-# Edita el mensaje: feat: implement secure user login system
-# ✅ Commit creado con mensaje editado
+# Proposed message: "feat: add login"
+# Use this message? (y/n/e to edit): e
+# Edit message: feat: implement secure user login system
+# ✅ Commit created with edited message
 ```
 
-## 🔄 Escenarios de fallback
+## 🔄 Fallback scenarios
 
-### Sin conexión a internet
+### No internet connection
 
 ```bash
 git add multiple_files.py config.json
 kiro commit --from-diff
 ```
 
-**Salida:**
+**Output:**
 ```
-🔍 Analizando cambios staged...
-⚠️  API no disponible, generando mensaje básico...
+🔍 Analyzing staged changes...
+⚠️  API not available, generating basic message...
 
-📝 Mensaje propuesto:
+📝 Proposed message:
 chore: update multiple_files.py, config.json
 
-¿Usar este mensaje? (y/n/e para editar): e
-Edita el mensaje: feat: add configuration management system
+Use this message? (y/n/e to edit): e
+Edit message: feat: add configuration management system
 ```
 
-### API key no configurada
+### API key not configured
 
 ```bash
-# Sin GROQ_API_KEY configurada
+# Without GROQ_API_KEY configured
 kiro commit --from-diff
 ```
 
-**Salida:**
+**Output:**
 ```
-⚠️  GROQ_API_KEY no configurada. Usando mensaje básico...
-Configura tu API key para obtener mensajes más inteligentes.
+⚠️  GROQ_API_KEY not configured. Using basic message...
+Configure your API key to get smarter messages.
 
-📝 Mensaje propuesto:
+📝 Proposed message:
 chore: update 3 files
 ```
 
-## 🛠️ Flujos de trabajo avanzados
+## 🛠️ Advanced workflows
 
-### Workflow de desarrollo de features
+### Feature development workflow
 
 ```bash
-# 1. Crear rama para feature
+# 1. Create feature branch
 git checkout -b feature/user-profile
 
-# 2. Implementar funcionalidad básica
+# 2. Implement basic functionality
 echo "class UserProfile: pass" > user_profile.py
 git add user_profile.py
 kiro commit --from-diff
 # "feat: add user profile model"
 
-# 3. Añadir validaciones
-# Editar user_profile.py para añadir validaciones
+# 3. Add validations
+# Edit user_profile.py to add validations
 git add user_profile.py
 kiro commit --from-diff
 # "feat: add validation to user profile"
 
-# 4. Añadir tests
+# 4. Add tests
 echo "def test_user_profile(): pass" > test_user_profile.py
 git add test_user_profile.py
 kiro commit --from-diff
 # "test: add user profile tests"
 
-# 5. Documentar
+# 5. Document
 echo "# User Profile\n\nManages user profiles..." > docs/user_profile.md
 git add docs/user_profile.md
 kiro commit --from-diff
 # "docs: add user profile documentation"
 ```
 
-### Workflow de bugfix
+### Bugfix workflow
 
 ```bash
-# 1. Crear rama para bugfix
+# 1. Create bugfix branch
 git checkout -b fix/login-error
 
-# 2. Identificar y corregir el problema
-# Editar auth.py para corregir el bug
+# 2. Identify and fix the problem
+# Edit auth.py to fix the bug
 git add auth.py
 kiro commit --from-diff
 # "fix: resolve login timeout issue"
 
-# 3. Añadir test para prevenir regresión
+# 3. Add test to prevent regression
 git add test_auth.py
 kiro commit --from-diff
 # "test: add test for login timeout scenario"
 
-# 4. Actualizar documentación si es necesario
+# 4. Update documentation if necessary
 git add README.md
 kiro commit --from-diff
 # "docs: update troubleshooting section"
 ```
 
-### Workflow de refactoring
+### Refactoring workflow
 
 ```bash
-# 1. Extraer funciones comunes
+# 1. Extract common functions
 git add utils.py
 kiro commit --from-diff
 # "refactor: extract common utilities"
 
-# 2. Actualizar imports en archivos existentes
+# 2. Update imports in existing files
 git add main.py auth.py
 kiro commit --from-diff
 # "refactor: update imports to use new utilities"
 
-# 3. Eliminar código duplicado
+# 3. Remove duplicate code
 git add legacy_utils.py
 kiro commit --from-diff
 # "refactor: remove duplicate utility functions"
 ```
 
-## 🎯 Mejores prácticas
+## 🎯 Best practices
 
-### 1. Commits atómicos
+### 1. Atomic commits
 
 ```bash
-# ✅ Bueno: Un cambio lógico por commit
+# ✅ Good: One logical change per commit
 git add user_model.py
 kiro commit --from-diff
 # "feat: add user model"
@@ -294,82 +294,82 @@ git add user_controller.py
 kiro commit --from-diff
 # "feat: add user controller"
 
-# ❌ Evitar: Múltiples cambios no relacionados
+# ❌ Avoid: Multiple unrelated changes
 # git add user_model.py payment_system.py bug_fix.py
 ```
 
-### 2. Staging selectivo
+### 2. Selective staging
 
 ```bash
-# Añadir solo partes específicas de un archivo
+# Add only specific parts of a file
 git add -p complex_file.py
 kiro commit --from-diff
 
-# Añadir archivos específicos
+# Add specific files
 git add src/models/user.py src/controllers/user.py
 kiro commit --from-diff
 ```
 
-### 3. Revisar cambios antes del commit
+### 3. Review changes before commit
 
 ```bash
-# Revisar qué está staged
+# Review what's staged
 git diff --staged
 
-# Generar commit
+# Generate commit
 kiro commit --from-diff
 ```
 
-### 4. Usar edición cuando sea necesario
+### 4. Use editing when necessary
 
 ```bash
 kiro commit --from-diff
-# Si el mensaje generado es: "chore: update files"
-# Usar 'e' para editarlo a algo más descriptivo:
+# If the generated message is: "chore: update files"
+# Use 'e' to edit it to something more descriptive:
 # "feat: implement user authentication middleware"
 ```
 
-## 🔍 Casos de uso específicos
+## 🔍 Specific use cases
 
-### Proyecto Python
+### Python project
 
 ```bash
-# Añadir nueva clase
+# Add new class
 git add models/product.py
 kiro commit --from-diff
 # "feat: add product model with validation"
 
-# Actualizar requirements
+# Update requirements
 git add requirements.txt
 kiro commit --from-diff
 # "chore: update dependencies to latest versions"
 
-# Corregir import
+# Fix import
 git add __init__.py
 kiro commit --from-diff
 # "fix: correct module imports in package"
 ```
 
-### Proyecto JavaScript/Node.js
+### JavaScript/Node.js project
 
 ```bash
-# Nuevo componente React
+# New React component
 git add components/UserCard.jsx
 kiro commit --from-diff
 # "feat: add user card component"
 
-# Actualizar package.json
+# Update package.json
 git add package.json package-lock.json
 kiro commit --from-diff
 # "chore: update npm dependencies"
 
-# Corregir bug en async function
+# Fix bug in async function
 git add api/users.js
 kiro commit --from-diff
 # "fix: handle async errors in user API"
 ```
 
-### Configuración y DevOps
+### Configuration and DevOps
 
 ```bash
 # Docker configuration
@@ -388,49 +388,49 @@ kiro commit --from-diff
 # "chore: add environment variables template"
 ```
 
-## 📊 Estadísticas y análisis
+## 📊 Statistics and analysis
 
-### Analizar patrones de commit
+### Analyze commit patterns
 
 ```bash
-# Ver historial de commits generados
+# View history of generated commits
 git log --oneline --grep="feat:"
 git log --oneline --grep="fix:"
 git log --oneline --grep="docs:"
 
-# Estadísticas por tipo
+# Statistics by type
 git log --pretty=format:"%s" | grep -E "^(feat|fix|docs|refactor|test|chore):" | sort | uniq -c
 ```
 
-### Comparar con commits manuales
+### Compare with manual commits
 
 ```bash
-# Commits antes de usar Kiro Commit Buddy
+# Commits before using Kiro Commit Buddy
 git log --before="2024-01-01" --oneline
 
-# Commits después de usar Kiro Commit Buddy
+# Commits after using Kiro Commit Buddy
 git log --after="2024-01-01" --oneline
 ```
 
-## 🎓 Consejos avanzados
+## 🎓 Advanced tips
 
-### 1. Personalizar mensajes según el contexto
+### 1. Customize messages according to context
 
-Si trabajas en diferentes tipos de proyectos, puedes editar los mensajes para que se adapten mejor:
+If you work on different types of projects, you can edit messages to better adapt them:
 
 ```bash
-# Para proyectos de API
+# For API projects
 kiro commit --from-diff
-# Editar: "feat: add user endpoint" → "feat: add GET /api/users endpoint"
+# Edit: "feat: add user endpoint" → "feat: add GET /api/users endpoint"
 
-# Para proyectos de frontend
+# For frontend projects
 kiro commit --from-diff
-# Editar: "feat: add component" → "feat: add responsive user profile component"
+# Edit: "feat: add component" → "feat: add responsive user profile component"
 ```
 
-### 2. Usar con hooks de Git
+### 2. Use with Git hooks
 
-Puedes integrar Kiro Commit Buddy con hooks de Git para automatizar aún más el proceso:
+You can integrate Kiro Commit Buddy with Git hooks to automate the process even more:
 
 ```bash
 # .git/hooks/prepare-commit-msg
@@ -440,14 +440,14 @@ if [ -z "$2" ]; then
 fi
 ```
 
-### 3. Combinar con herramientas de linting
+### 3. Combine with linting tools
 
 ```bash
-# Ejecutar linter antes del commit
+# Run linter before commit
 npm run lint
 git add .
 kiro commit --from-diff
 # "style: fix linting issues in components"
 ```
 
-¡Estos ejemplos te ayudarán a aprovechar al máximo Kiro Commit Buddy en tu flujo de trabajo diario! 🚀
+These examples will help you make the most of Kiro Commit Buddy in your daily workflow! 🚀
