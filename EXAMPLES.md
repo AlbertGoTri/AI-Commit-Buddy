@@ -446,7 +446,7 @@ fi
 # Run linter before commit
 npm run lint
 git add .
-kiro commit --from-diff
+python .kiro/scripts/commit_buddy.py --from-diff
 # "style: fix linting issues in components"
 ```
 
