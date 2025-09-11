@@ -103,14 +103,29 @@ python .kiro/scripts/commit_buddy.py --from-diff
 $ python .kiro/scripts/commit_buddy.py --from-diff
 
 🔍 Analyzing staged changes...
-🤖 Generating message with AI...
+✨ Generated message:
+feat: add user authentication system
 
-📝 Proposed message:
-feat: add user authentication with JWT tokens
+- auth.py: implement login and registration functions
+- login.html: create user login form with validation  
+- styles.css: add authentication page styling
+- config.py: add authentication configuration settings
 
-Use this message? (y/n/e to edit): y
+💬 Use this message? (y/n/e to edit): y
+✅ Committed successfully!
+```
 
-✅ Commit created successfully: a1b2c3d
+### Simple Single-Line Messages
+
+For simple single-line messages, use the `--simple` flag:
+
+```
+$ python .kiro/scripts/commit_buddy.py --from-diff --simple
+
+🔍 Analyzing staged changes...
+✨ Generated message: feat: add user authentication system
+💬 Use this message? (y/n/e to edit): y
+✅ Committed successfully!
 ```
 
 ## 🎯 Supported commit types

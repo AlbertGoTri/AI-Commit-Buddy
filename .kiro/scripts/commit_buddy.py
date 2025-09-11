@@ -49,14 +49,9 @@ class CommitBuddy:
             help="Run API diagnostics instead of generating commit"
         )
         parser.add_argument(
-            "--detailed",
-            action="store_true",
-            help="Generate detailed multi-line commit messages with file breakdown"
-        )
-        parser.add_argument(
             "--simple",
             action="store_true",
-            help="Generate simple single-line commit messages"
+            help="Generate simple single-line commit messages (default is detailed)"
         )
 
         parsed_args = parser.parse_args(args)
@@ -69,7 +64,9 @@ class CommitBuddy:
         if parsed_args.debug_api:
             return self.run_api_diagnostics()
         elif parsed_args.from_diff:
-            return self.handle_from_diff()
+            # Default to detailed mode unless --simple is specified
+            detailed = not parsed_args.simple
+            return self.handle_from_diff(detailed=detailed)
         else:
             parser.print_help()
             return 0
@@ -89,7 +86,7 @@ class CommitBuddy:
             self.ui.show_error(f"Error running diagnostics: {str(e)}")
             return 1
 
-    def handle_from_diff(self):
+    def handle_from_diff(self, detailed=False):
         """Handle the --from-diff command"""
         self.logger.info("Starting commit message generation from diff", "MAIN")
         
@@ -126,15 +123,15 @@ class CommitBuddy:
             message_generator = MessageGenerator(self.config)
 
             try:
-                commit_message = message_generator.generate_message(staged_diff, changed_files)
+                commit_message = message_generator.generate_message(staged_diff, changed_files, detailed)
             except GroqAPIError as e:
                 self.ui.show_warning(f"API error: {str(e)}")
                 self.ui.show_info("Using local message generation...")
-                commit_message = message_generator.generate_fallback_message(changed_files)
+                commit_message = message_generator.generate_fallback_message(changed_files, detailed)
             except Exception as e:
                 self.ui.show_warning(f"Error generating message: {str(e)}")
                 self.ui.show_info("Using fallback message generation...")
-                commit_message = message_generator.generate_fallback_message(changed_files)
+                commit_message = message_generator.generate_fallback_message(changed_files, detailed)
 
             # Step 6: Present message to user and handle response
             while True:

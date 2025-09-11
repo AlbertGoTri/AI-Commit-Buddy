@@ -13,7 +13,7 @@ echo "print('Hello, World!')" > hello.py
 # 2. Add to staging
 git add hello.py
 
-# 3. Generate commit with AI
+# 3. Generate detailed commit with AI (default behavior)
 python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
@@ -316,7 +316,7 @@ python .kiro/scripts/commit_buddy.py --from-diff
 # Review what's staged
 git diff --staged
 
-# Generate commit
+# Generate detailed commit (default behavior)
 python .kiro/scripts/commit_buddy.py --from-diff
 ```
 

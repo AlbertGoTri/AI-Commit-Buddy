@@ -14,7 +14,8 @@ A **Kiro workspace** is any directory that contains a `.kiro/` folder. It's like
 
 ### Does it only work in Kiro projects?
 **No!** It works in **any Git repository**, whether it has Kiro or not:
-- **Command**: `python .kiro/scripts/commit_buddy.py --from-diff`
+- **Detailed (default)**: `python .kiro/scripts/commit_buddy.py --from-diff` (includes file-by-file breakdown)
+- **Simple**: `python .kiro/scripts/commit_buddy.py --from-diff --simple` (single-line messages)
 
 ### How to use in other projects?
 Simply copy the `.kiro/` folder to any other Git repository and it will work there too.
