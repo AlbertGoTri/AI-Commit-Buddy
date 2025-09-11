@@ -88,7 +88,7 @@ class GroqClient:
             self.logger.error(f"API availability check failed - unexpected error: {str(e)}", "GROQ")
             return False
 
-    def generate_commit_message(self, diff: str) -> str:
+    def generate_commit_message(self, diff: str, detailed: bool = False) -> str:
         """
         Generate commit message using Groq API
 
@@ -112,7 +112,10 @@ class GroqClient:
 
             # Prepare the API request
             headers = self.config.get_api_headers()
-            prompt = self.config.get_commit_prompt_template().format(diff=diff)
+            if detailed:
+                prompt = self.config.get_detailed_commit_prompt_template().format(diff=diff)
+            else:
+                prompt = self.config.get_simple_commit_prompt_template().format(diff=diff)
 
             payload = {
                 "model": self.config.GROQ_MODEL,
@@ -213,7 +216,7 @@ class GroqClient:
         message = message.strip()
         
         # Check if this is a detailed multi-line commit message
-        if self.config.ENABLE_DETAILED_COMMITS and '\n' in message:
+        if '\n' in message:
             return self._clean_detailed_commit_message(message)
         else:
             return self._clean_simple_commit_message(message)
@@ -229,8 +232,15 @@ class GroqClient:
         for i, line in enumerate(lines):
             line = line.strip()
             
-            # Skip empty explanatory lines
-            if not line or line.lower().startswith(('analysis:', 'justification:', 'based on', 'the message')):
+            # Skip explanatory notes and comments
+            if (not line or 
+                line.lower().startswith(('note:', 'explanation:', 'analysis:', 'justification:', 'based on', 'the message', 'since ', 'because ', 'as ', 'this ')) or
+                'i did not include' in line.lower() or
+                'no changes' in line.lower() or
+                'were no changes' in line.lower() or
+                'there were no changes' in line.lower() or
+                'provided diff' in line.lower() or
+                'in the diff' in line.lower()):
                 if i == 1:  # Keep empty line after summary
                     cleaned_lines.append('')
                 continue
@@ -243,6 +253,10 @@ class GroqClient:
                 line = line[1:-1].strip()
             
             cleaned_lines.append(line)
+        
+        # Remove trailing empty lines
+        while cleaned_lines and not cleaned_lines[-1]:
+            cleaned_lines.pop()
         
         # Ensure we have at least a summary line
         if not cleaned_lines:

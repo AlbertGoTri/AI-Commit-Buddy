@@ -16,7 +16,7 @@ class Config:
         self.GROQ_ENDPOINT: str = "https://api.groq.com/openai/v1/chat/completions"
 
         # Application Settings
-        self.MAX_DIFF_SIZE: int = 8000  # Maximum characters for diff
+        self.MAX_DIFF_SIZE: int = 12000  # Maximum characters for diff
         self.TIMEOUT: int = 10  # API timeout in seconds
         self.MAX_TOKENS: int = 300  # Maximum tokens for API response (increased for multi-line)
         self.TEMPERATURE: float = 0.3  # API temperature setting

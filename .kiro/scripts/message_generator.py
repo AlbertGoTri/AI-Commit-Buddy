@@ -43,7 +43,7 @@ class MessageGenerator:
         else:
             self.logger.debug("No API key available, will use fallback messages", "MSG_GEN")
 
-    def generate_message(self, diff: str, files: List[str]) -> str:
+    def generate_message(self, diff: str, files: List[str], detailed: bool = False) -> str:
         """
         Generate commit message using AI or fallback
 
@@ -76,7 +76,7 @@ class MessageGenerator:
                     })
                 else:
                     self.logger.debug("API is available, generating message", "MSG_GEN")
-                    ai_message = self.groq_client.generate_commit_message(diff)
+                    ai_message = self.groq_client.generate_commit_message(diff, detailed)
                     self.logger.debug(f"AI generated message: {ai_message}", "MSG_GEN")
 
                     # Validate the AI-generated message
@@ -134,7 +134,7 @@ class MessageGenerator:
         self.logger.log_message_generation("fallback", str(files), fallback_message)
         return fallback_message
 
-    def generate_fallback_message(self, files: List[str]) -> str:
+    def generate_fallback_message(self, files: List[str], detailed: bool = False) -> str:
         """
         Generate fallback commit message when AI is not available
 
@@ -150,8 +150,8 @@ class MessageGenerator:
         # Determine commit type based on file patterns
         commit_type = self._determine_commit_type_from_files(files)
 
-        # Generate detailed message if enabled and multiple files
-        if self.config.ENABLE_DETAILED_COMMITS and len(files) > 1:
+        # Generate detailed message if requested and multiple files
+        if detailed and len(files) > 1:
             return self._generate_detailed_fallback_message(commit_type, files)
         
         # Generate simple message
@@ -166,19 +166,86 @@ class MessageGenerator:
 
     def _generate_detailed_fallback_message(self, commit_type: str, files: List[str]) -> str:
         """Generate detailed fallback message with file breakdown"""
-        # Create summary line
-        summary = f"{commit_type}: update {len(files)} files"
+        # Create summary line based on file types
+        if len(files) == 1:
+            summary = f"{commit_type}: update {os.path.basename(files[0])}"
+        else:
+            # Analyze file types for better summary
+            file_types = set()
+            for file_path in files:
+                ext = os.path.splitext(file_path)[1].lower()
+                if ext in ['.py']:
+                    file_types.add('Python code')
+                elif ext in ['.js', '.ts']:
+                    file_types.add('JavaScript')
+                elif ext in ['.html']:
+                    file_types.add('HTML')
+                elif ext in ['.css']:
+                    file_types.add('styles')
+                elif ext in ['.md']:
+                    file_types.add('documentation')
+                else:
+                    file_types.add('files')
+            
+            if len(file_types) == 1:
+                summary = f"{commit_type}: update {list(file_types)[0]}"
+            else:
+                summary = f"{commit_type}: update multiple components"
         
-        # Create file breakdown
+        # Create file breakdown with intelligent descriptions
         file_lines = []
         for file_path in files[:10]:  # Limit to first 10 files to avoid too long messages
             filename = os.path.basename(file_path)
-            file_lines.append(f"- {filename}: update file")
+            description = self._generate_file_description_from_name(filename)
+            file_lines.append(f"- {filename}: {description}")
         
         if len(files) > 10:
             file_lines.append(f"- ... and {len(files) - 10} more files")
         
         return summary + "\n\n" + "\n".join(file_lines)
+    
+    def _generate_file_description_from_name(self, filename: str) -> str:
+        """Generate description based on filename patterns"""
+        filename_lower = filename.lower()
+        
+        # Skip cache files
+        if '.pyc' in filename or '__pycache__' in filename:
+            return "update compiled Python cache"
+        
+        # Check file extensions
+        ext = os.path.splitext(filename)[1].lower()
+        
+        if ext == '.py':
+            if 'test' in filename_lower:
+                return "update test functions"
+            elif 'config' in filename_lower:
+                return "update configuration settings"
+            elif 'client' in filename_lower:
+                return "update API client functionality"
+            elif 'generator' in filename_lower:
+                return "update message generation logic"
+            else:
+                return "update Python functionality"
+        
+        elif ext == '.html':
+            if 'test' in filename_lower:
+                return "update test page structure"
+            elif 'index' in filename_lower:
+                return "update main page content"
+            else:
+                return "update HTML content"
+        
+        elif ext == '.css':
+            return "update styling rules"
+        
+        elif ext == '.js':
+            return "update JavaScript functionality"
+        
+        elif ext == '.md':
+            return "update documentation"
+        
+        else:
+            return "update file content"
 
     def validate_conventional_format(self, message: str) -> bool:
         """

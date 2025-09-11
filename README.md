@@ -4,8 +4,9 @@ An intelligent CLI tool that automates commit message generation using artificia
 
 ## ✨ Features
 
-- 🤖 **Automatic message generation** using AI (Groq API)
+- 🤖 **Intelligent message generation** using AI (Groq API)
 - 📝 **Automatic Conventional Commits format** (feat, fix, docs, etc.)
+- 📋 **Perfect for multi-file changes** with detailed file-by-file breakdown
 - 🔄 **Fallback mode** for offline functionality
 - 🎨 **Colorful interface** and easy to use
 - ⚡ **Native Kiro integration**
@@ -80,24 +81,28 @@ GROQ_API_KEY=your_api_key_here
 python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
-This command:
+This command excels at handling complex changes across multiple files:
 1. Analyzes staged changes in your repository
-2. Generates a commit message using AI
-3. Shows you the proposed message
+2. Generates intelligent commit messages with file-by-file breakdown using AI
+3. Shows you the proposed message with specific descriptions for each file
 4. Allows you to confirm, edit, or cancel
 5. Executes the commit automatically
 
 ### Typical workflow
 
-```bash
-# 1. Make your changes
-git add file1.py file2.js
+Perfect for complex features affecting multiple files:
 
-# 2. Generate and execute the commit
+```bash
+# 1. Make changes across multiple files
+git add auth.py login.html styles.css config.py
+
+# 2. Generate detailed commit with file-by-file breakdown
 python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 ### Session example
+
+Kiro Commit Buddy excels at handling complex changes across multiple files:
 
 ```
 $ python .kiro/scripts/commit_buddy.py --from-diff
@@ -115,18 +120,9 @@ feat: add user authentication system
 ✅ Committed successfully!
 ```
 
-### Simple Single-Line Messages
+The tool automatically analyzes each file's changes and provides specific descriptions of what was modified, making it perfect for complex features that span multiple files.
 
-For simple single-line messages, use the `--simple` flag:
-
-```
-$ python .kiro/scripts/commit_buddy.py --from-diff --simple
-
-🔍 Analyzing staged changes...
-✨ Generated message: feat: add user authentication system
-💬 Use this message? (y/n/e to edit): y
-✅ Committed successfully!
-```
+> **Note:** For simpler single-line messages, you can use the `--simple` flag if preferred.
 
 ## 🎯 Supported commit types
 

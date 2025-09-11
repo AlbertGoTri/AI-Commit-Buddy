@@ -1,6 +1,6 @@
 # Usage Examples - Kiro Commit Buddy
 
-This guide contains practical examples of how to use Kiro Commit Buddy in different scenarios.
+This guide contains practical examples of how to use Kiro Commit Buddy in different scenarios. Kiro Commit Buddy excels at handling complex changes across multiple files, providing detailed file-by-file breakdowns.
 
 ## 🚀 Basic usage
 
@@ -57,10 +57,15 @@ Use this message? (y/n/e to edit): y
 ### feat: New features
 
 ```bash
-# Add new authentication function
-git add auth.py login.html
+# Add new authentication system (multiple files)
+git add auth.py login.html styles.css
 python .kiro/scripts/commit_buddy.py --from-diff
-# Result: "feat: add user authentication system"
+# Result: 
+# feat: add user authentication system
+# 
+# - auth.py: implement login and registration functions
+# - login.html: create user login form with validation
+# - styles.css: add authentication page styling
 
 # Add API endpoint
 git add api/users.py
@@ -99,10 +104,15 @@ python .kiro/scripts/commit_buddy.py --from-diff
 ### refactor: Refactoring
 
 ```bash
-# Reorganize code
-git add utils.py helpers.py
+# Reorganize code across multiple files
+git add utils.py helpers.py main.py
 python .kiro/scripts/commit_buddy.py --from-diff
-# Result: "refactor: extract utility functions to separate module"
+# Result:
+# refactor: extract utility functions to separate module
+#
+# - utils.py: extract common utility functions
+# - helpers.py: add helper functions for data processing
+# - main.py: update imports to use new utility modules
 
 # Improve class structure
 git add models/user.py
@@ -209,33 +219,30 @@ chore: update 3 files
 
 ### Feature development workflow
 
+Perfect for complex features spanning multiple files:
+
 ```bash
 # 1. Create feature branch
 git checkout -b feature/user-profile
 
-# 2. Implement basic functionality
+# 2. Implement complete feature across multiple files
 echo "class UserProfile: pass" > user_profile.py
-git add user_profile.py
-python .kiro/scripts/commit_buddy.py --from-diff
-# "feat: add user profile model"
-
-# 3. Add validations
-# Edit user_profile.py to add validations
-git add user_profile.py
-python .kiro/scripts/commit_buddy.py --from-diff
-# "feat: add validation to user profile"
-
-# 4. Add tests
+echo "<form>...</form>" > profile_form.html
+echo ".profile { ... }" > profile.css
 echo "def test_user_profile(): pass" > test_user_profile.py
-git add test_user_profile.py
-python .kiro/scripts/commit_buddy.py --from-diff
-# "test: add user profile tests"
 
-# 5. Document
-echo "# User Profile\n\nManages user profiles..." > docs/user_profile.md
-git add docs/user_profile.md
+# 3. Stage all related files
+git add user_profile.py profile_form.html profile.css test_user_profile.py
+
+# 4. Generate comprehensive commit message
 python .kiro/scripts/commit_buddy.py --from-diff
-# "docs: add user profile documentation"
+# Result:
+# feat: implement user profile management system
+#
+# - user_profile.py: add UserProfile model with validation
+# - profile_form.html: create user profile form interface
+# - profile.css: add styling for profile components
+# - test_user_profile.py: add comprehensive profile tests
 ```
 
 ### Bugfix workflow
@@ -282,20 +289,26 @@ python .kiro/scripts/commit_buddy.py --from-diff
 
 ## 🎯 Best practices
 
-### 1. Atomic commits
+### 1. Logical grouping of related changes
 
 ```bash
-# ✅ Good: One logical change per commit
-git add user_model.py
+# ✅ Excellent: Related files for one feature
+git add user_model.py user_controller.py user_view.html
 python .kiro/scripts/commit_buddy.py --from-diff
-# "feat: add user model"
+# Result:
+# feat: implement user management system
+#
+# - user_model.py: add User model with validation
+# - user_controller.py: implement user CRUD operations
+# - user_view.html: create user interface templates
 
-git add user_controller.py
+# ✅ Good: Single file changes
+git add bug_fix.py
 python .kiro/scripts/commit_buddy.py --from-diff
-# "feat: add user controller"
+# "fix: resolve authentication timeout issue"
 
 # ❌ Avoid: Multiple unrelated changes
-# git add user_model.py payment_system.py bug_fix.py
+# git add user_model.py payment_system.py random_bug_fix.py
 ```
 
 ### 2. Selective staging
@@ -451,3 +464,17 @@ python .kiro/scripts/commit_buddy.py --from-diff
 ```
 
 These examples will help you make the most of Kiro Commit Buddy in your daily workflow! 🚀
+
+## 📝 Additional Options
+
+### Simple mode (optional)
+
+If you prefer single-line commit messages for simple changes, you can use the `--simple` flag:
+
+```bash
+git add single_file.py
+python .kiro/scripts/commit_buddy.py --from-diff --simple
+# Result: "feat: add user authentication function"
+```
+
+However, the default detailed mode is recommended as it provides much more context about your changes, especially when working with multiple files.

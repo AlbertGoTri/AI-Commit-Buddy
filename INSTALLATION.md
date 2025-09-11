@@ -13,9 +13,9 @@ This guide will take you step by step through the installation and configuration
 A **Kiro workspace** is any directory that contains a `.kiro/` folder. It's like `.git/` for Git - it simply marks that the directory uses Kiro.
 
 ### Does it only work in Kiro projects?
-**No!** It works in **any Git repository**, whether it has Kiro or not:
-- **Detailed (default)**: `python .kiro/scripts/commit_buddy.py --from-diff` (includes file-by-file breakdown)
-- **Simple**: `python .kiro/scripts/commit_buddy.py --from-diff --simple` (single-line messages)
+**No!** It works in **any Git repository**, whether it has Kiro or not. It's particularly excellent for complex changes across multiple files:
+- **Default behavior**: `python .kiro/scripts/commit_buddy.py --from-diff` (detailed file-by-file breakdown)
+- **Simple mode**: `python .kiro/scripts/commit_buddy.py --from-diff --simple` (single-line messages, if preferred)
 
 ### How to use in other projects?
 Simply copy the `.kiro/` folder to any other Git repository and it will work there too.
@@ -187,13 +187,14 @@ echo $GROQ_API_KEY
    
    You should see the command help.
 
-3. **Test with Kiro:**
+3. **Test with multiple files (recommended):**
    ```bash
-   # Make some changes and add them to staging
+   # Make changes to multiple files to see the detailed breakdown
    echo "test" > test.txt
-   git add test.txt
+   echo "# Test" > README_test.md
+   git add test.txt README_test.md
    
-   # Test the command
+   # Test the command - you'll see detailed file-by-file analysis
    python .kiro/scripts/commit_buddy.py --from-diff
    ```
 
@@ -336,9 +337,10 @@ def verify_installation():
     
     print("\n🎉 Installation completed successfully!")
     print("\nNext steps:")
-    print("1. Make some changes to your code")
-    print("2. Add them to staging: git add .")
+    print("1. Make changes to multiple files (works best with complex changes)")
+    print("2. Add them to staging: git add file1.py file2.html file3.css")
     print("3. Run: python .kiro/scripts/commit_buddy.py --from-diff")
+    print("4. Enjoy detailed file-by-file commit messages!")
     
     return True
 
