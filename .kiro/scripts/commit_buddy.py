@@ -48,6 +48,16 @@ class CommitBuddy:
             action="store_true",
             help="Run API diagnostics instead of generating commit"
         )
+        parser.add_argument(
+            "--detailed",
+            action="store_true",
+            help="Generate detailed multi-line commit messages with file breakdown"
+        )
+        parser.add_argument(
+            "--simple",
+            action="store_true",
+            help="Generate simple single-line commit messages"
+        )
 
         parsed_args = parser.parse_args(args)
 

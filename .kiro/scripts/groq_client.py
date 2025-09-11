@@ -209,8 +209,60 @@ class GroqClient:
         """Clean and validate the commit message"""
         import re
         
-        # Remove any extra whitespace and newlines
+        # Remove any extra whitespace but preserve line structure for detailed commits
         message = message.strip()
+        
+        # Check if this is a detailed multi-line commit message
+        if self.config.ENABLE_DETAILED_COMMITS and '\n' in message:
+            return self._clean_detailed_commit_message(message)
+        else:
+            return self._clean_simple_commit_message(message)
+
+    def _clean_detailed_commit_message(self, message: str) -> str:
+        """Clean multi-line detailed commit message"""
+        import re
+        
+        lines = message.split('\n')
+        cleaned_lines = []
+        
+        # Process each line
+        for i, line in enumerate(lines):
+            line = line.strip()
+            
+            # Skip empty explanatory lines
+            if not line or line.lower().startswith(('analysis:', 'justification:', 'based on', 'the message')):
+                if i == 1:  # Keep empty line after summary
+                    cleaned_lines.append('')
+                continue
+            
+            # Remove quotes and backticks
+            if (line.startswith('"') and line.endswith('"')) or \
+               (line.startswith("'") and line.endswith("'")):
+                line = line[1:-1].strip()
+            if line.startswith('`') and line.endswith('`'):
+                line = line[1:-1].strip()
+            
+            cleaned_lines.append(line)
+        
+        # Ensure we have at least a summary line
+        if not cleaned_lines:
+            raise GroqAPIError("Empty commit message after cleaning")
+        
+        # Validate first line follows conventional commit format
+        conventional_pattern = r'^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+'
+        if not re.match(conventional_pattern, cleaned_lines[0], re.IGNORECASE):
+            # Try to fix the first line
+            cleaned_lines[0] = self._fix_summary_line(cleaned_lines[0])
+        
+        # Limit summary line length
+        if len(cleaned_lines[0]) > 72:
+            cleaned_lines[0] = cleaned_lines[0][:69] + "..."
+        
+        return '\n'.join(cleaned_lines)
+
+    def _clean_simple_commit_message(self, message: str) -> str:
+        """Clean single-line commit message"""
+        import re
         
         # If the message contains explanations, try to extract just the commit message
         lines = message.split('\n')
@@ -256,3 +308,23 @@ class GroqClient:
             message = message[:69] + "..."
 
         return message
+
+    def _fix_summary_line(self, line: str) -> str:
+        """Fix summary line to follow conventional commit format"""
+        # Simple heuristic to add appropriate prefix
+        line_lower = line.lower()
+        
+        if any(word in line_lower for word in ['add', 'implement', 'create', 'new']):
+            return f"feat: {line}"
+        elif any(word in line_lower for word in ['fix', 'resolve', 'correct']):
+            return f"fix: {line}"
+        elif any(word in line_lower for word in ['doc', 'readme', 'comment']):
+            return f"docs: {line}"
+        elif any(word in line_lower for word in ['test', 'spec']):
+            return f"test: {line}"
+        elif any(word in line_lower for word in ['refactor', 'restructure']):
+            return f"refactor: {line}"
+        elif any(word in line_lower for word in ['style', 'format']):
+            return f"style: {line}"
+        else:
+            return f"chore: {line}"

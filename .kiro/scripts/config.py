@@ -18,8 +18,9 @@ class Config:
         # Application Settings
         self.MAX_DIFF_SIZE: int = 8000  # Maximum characters for diff
         self.TIMEOUT: int = 10  # API timeout in seconds
-        self.MAX_TOKENS: int = 150  # Maximum tokens for API response
+        self.MAX_TOKENS: int = 300  # Maximum tokens for API response (increased for multi-line)
         self.TEMPERATURE: float = 0.3  # API temperature setting
+        self.ENABLE_DETAILED_COMMITS: bool = os.getenv("KIRO_DETAILED_COMMITS", "true").lower() == "true"
 
         # Validation
         self._validate_config()
@@ -82,6 +83,13 @@ class Config:
 
     def get_commit_prompt_template(self) -> str:
         """Get the prompt template for commit message generation"""
+        if self.ENABLE_DETAILED_COMMITS:
+            return self.get_detailed_commit_prompt_template()
+        else:
+            return self.get_simple_commit_prompt_template()
+
+    def get_simple_commit_prompt_template(self) -> str:
+        """Get the simple single-line commit prompt template"""
         return """Carefully analyze the following git diff and generate a specific and descriptive commit message following Conventional Commits.
 
 IMPORTANT INSTRUCTIONS:
@@ -120,3 +128,43 @@ Required format: "prefix: specific description"
 Maximum 50 characters.
 
 Commit message:"""
+
+    def get_detailed_commit_prompt_template(self) -> str:
+        """Get the detailed multi-line commit prompt template"""
+        return """Analyze the following git diff and generate a detailed commit message with file-by-file breakdown.
+
+FORMAT REQUIREMENTS:
+1. First line: Conventional commit summary (max 50 chars)
+2. Empty line
+3. File-by-file breakdown with specific changes
+
+PREFIXES:
+- feat: new functionality
+- fix: bug fixes  
+- docs: documentation
+- style: formatting/CSS
+- refactor: code restructuring
+- test: tests
+- chore: maintenance
+
+EXAMPLE OUTPUT:
+feat: enhance user interface and testing
+
+- index.html: add contact button in header navigation
+- styles.css: update button hover effects and spacing
+- test_ui.py: add unit tests for button functionality
+- README.md: update installation instructions
+
+INSTRUCTIONS:
+1. Analyze each file's changes specifically
+2. Use action verbs: add, remove, update, fix, implement
+3. Be specific about WHAT changed, not just WHERE
+4. Group related changes under one summary if they serve the same purpose
+5. Keep file descriptions concise but descriptive
+
+Diff to analyze:
+{diff}
+
+Generate the commit message in the exact format shown above:
+
+"""

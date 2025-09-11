@@ -150,7 +150,11 @@ class MessageGenerator:
         # Determine commit type based on file patterns
         commit_type = self._determine_commit_type_from_files(files)
 
-        # Generate message based on number of files
+        # Generate detailed message if enabled and multiple files
+        if self.config.ENABLE_DETAILED_COMMITS and len(files) > 1:
+            return self._generate_detailed_fallback_message(commit_type, files)
+        
+        # Generate simple message
         if len(files) == 1:
             filename = os.path.basename(files[0])
             return f"{commit_type}: update {filename}"
@@ -159,6 +163,22 @@ class MessageGenerator:
             return f"{commit_type}: update {', '.join(filenames)}"
         else:
             return f"{commit_type}: update {len(files)} files"
+
+    def _generate_detailed_fallback_message(self, commit_type: str, files: List[str]) -> str:
+        """Generate detailed fallback message with file breakdown"""
+        # Create summary line
+        summary = f"{commit_type}: update {len(files)} files"
+        
+        # Create file breakdown
+        file_lines = []
+        for file_path in files[:10]:  # Limit to first 10 files to avoid too long messages
+            filename = os.path.basename(file_path)
+            file_lines.append(f"- {filename}: update file")
+        
+        if len(files) > 10:
+            file_lines.append(f"- ... and {len(files) - 10} more files")
+        
+        return summary + "\n\n" + "\n".join(file_lines)
 
     def validate_conventional_format(self, message: str) -> bool:
         """
@@ -173,11 +193,14 @@ class MessageGenerator:
         if not message or not message.strip():
             return False
 
+        # For multi-line messages, validate the first line (summary)
+        first_line = message.strip().split('\n')[0]
+
         # Conventional Commits pattern: type(scope): description
         # Scope is optional, so we check for: type: description
         pattern = r'^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+'
 
-        return bool(re.match(pattern, message.strip(), re.IGNORECASE))
+        return bool(re.match(pattern, first_line.strip(), re.IGNORECASE))
 
     def _should_use_ai(self, diff: str) -> bool:
         """
