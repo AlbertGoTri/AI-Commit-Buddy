@@ -255,6 +255,15 @@ If you encounter problems or have questions:
 
 ## 🔄 Changelog
 
+### v1.1.0 (Latest)
+- ✅ **Enhanced multi-file analysis** - Detailed file-by-file breakdown by default
+- ✅ **Intelligent commit messages** - Specific descriptions for each file's changes
+- ✅ **Improved AI prompts** - Better context understanding for complex changes
+- ✅ **Optimized for complex features** - Perfect for changes spanning multiple files
+- ✅ **Simple mode option** - Added `--simple` flag for single-line messages when needed
+- ✅ **Better fallback messages** - Smarter file-type detection and descriptions
+- ✅ **Increased diff size limit** - Handles larger changesets (up to 12KB)
+
 ### v1.0.0
 - ✅ Automatic message generation with AI
 - ✅ Conventional Commits support
