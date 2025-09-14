@@ -1,4 +1,4 @@
-# Ai-Powered Commit Buddy
+# AI-Powered Commit Buddy
 
 An intelligent CLI tool that automates commit message generation using artificial intelligence. It analyzes changes in your Git repository and generates clear and concise commit messages following the Conventional Commits convention.
 
